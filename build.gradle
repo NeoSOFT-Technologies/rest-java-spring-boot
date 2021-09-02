@@ -5,6 +5,12 @@ plugins {
     id "org.sonarqube" version "3.3"
 
 }
+jacocoTestReport {
+  reports {
+    xml.enabled true
+  }
+}
+
 sonarqube {
 properties {
     property "sonar.projectName", "rest-java-spring-boots"
