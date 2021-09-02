@@ -34,6 +34,8 @@ jacocoTestReport {
 
 sonarqube {
 properties {
+    property 'sonar.host.url', 'https://sonarcloud.io'
+    property 'sonar.organization', 'neosoft-technologies'
     property "sonar.projectName", "rest-java-spring-boots"
     property "sonar.projectKey", "NeoSOFT-Technologies_rest-java-spring-boot"
     property "sonar.sources","src/main/java"
