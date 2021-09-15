@@ -3,11 +3,8 @@ package com.springboot.rest.web.rest;
 import com.springboot.rest.domain.A;
 import com.springboot.rest.repository.ARepository;
 import com.springboot.rest.web.rest.errors.BadRequestAlertException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +13,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
+
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * REST controller for managing {@link com.springboot.rest.domain.A}.
@@ -46,6 +49,7 @@ public class AResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/as")
+    @Operation(summary = "/as", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<A> createA(@RequestBody A a) throws URISyntaxException {
         log.debug("REST request to save A : {}", a);
         if (a.getId() != null) {
@@ -69,6 +73,7 @@ public class AResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/as/{id}")
+    @Operation(summary = "/as", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<A> updateA(@PathVariable(value = "id", required = false) final Long id, @RequestBody A a)
         throws URISyntaxException {
         log.debug("REST request to update A : {}, {}", id, a);
@@ -102,6 +107,7 @@ public class AResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/as/{id}", consumes = "application/merge-patch+json")
+    @Operation(summary = "/as", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<A> partialUpdateA(@PathVariable(value = "id", required = false) final Long id, @RequestBody A a)
         throws URISyntaxException {
         log.debug("REST request to partial update A partially : {}, {}", id, a);
@@ -150,6 +156,7 @@ public class AResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of aS in body.
      */
     @GetMapping("/as")
+    @Operation(summary = "/as", security = @SecurityRequirement(name = "bearerAuth"))
     public List<A> getAllAS() {
         log.debug("REST request to get all AS");
         return aRepository.findAll();
@@ -162,6 +169,7 @@ public class AResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the a, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/as/{id}")
+    @Operation(summary = "/as", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<A> getA(@PathVariable Long id) {
         log.debug("REST request to get A : {}", id);
         Optional<A> a = aRepository.findById(id);
@@ -175,6 +183,7 @@ public class AResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/as/{id}")
+    @Operation(summary = "/as", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<Void> deleteA(@PathVariable Long id) {
         log.debug("REST request to delete A : {}", id);
         aRepository.deleteById(id);

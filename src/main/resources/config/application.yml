@@ -146,6 +146,8 @@ info:
 springdoc:
   swagger-ui:
     disable-swagger-default-url: true
+  documentation:
+    auto-startup: false
 
 jhipster:
   clientApp:
