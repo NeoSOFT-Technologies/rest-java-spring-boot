@@ -7,18 +7,22 @@ import com.springboot.rest.service.MailService;
 import com.springboot.rest.service.UserService;
 import com.springboot.rest.service.dto.AdminUserDTO;
 import com.springboot.rest.service.dto.PasswordChangeDTO;
-import com.springboot.rest.service.dto.UserDTO;
-import com.springboot.rest.web.rest.errors.*;
+import com.springboot.rest.web.rest.errors.EmailAlreadyUsedException;
+import com.springboot.rest.web.rest.errors.InvalidPasswordException;
+import com.springboot.rest.web.rest.errors.LoginAlreadyUsedException;
 import com.springboot.rest.web.rest.vm.KeyAndPasswordVM;
 import com.springboot.rest.web.rest.vm.ManagedUserVM;
-import java.util.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
+import java.util.Optional;
 
 /**
  * REST controller for managing the current user's account.
@@ -99,6 +103,7 @@ public class AccountResource {
      * @throws RuntimeException {@code 500 (Internal Server Error)} if the user couldn't be returned.
      */
     @GetMapping("/account")
+    @Operation(summary = "/account", security = @SecurityRequirement(name = "bearerAuth"))
     public AdminUserDTO getAccount() {
         return userService
             .getUserWithAuthorities()
@@ -114,6 +119,7 @@ public class AccountResource {
      * @throws RuntimeException {@code 500 (Internal Server Error)} if the user login wasn't found.
      */
     @PostMapping("/account")
+    @Operation(summary = "/account", security = @SecurityRequirement(name = "bearerAuth"))
     public void saveAccount(@Valid @RequestBody AdminUserDTO userDTO) {
         String userLogin = SecurityUtils
             .getCurrentUserLogin()
@@ -142,6 +148,7 @@ public class AccountResource {
      * @throws InvalidPasswordException {@code 400 (Bad Request)} if the new password is incorrect.
      */
     @PostMapping(path = "/account/change-password")
+    @Operation(summary = "/account/change-password", security = @SecurityRequirement(name = "bearerAuth"))
     public void changePassword(@RequestBody PasswordChangeDTO passwordChangeDto) {
         if (isPasswordLengthInvalid(passwordChangeDto.getNewPassword())) {
             throw new InvalidPasswordException();

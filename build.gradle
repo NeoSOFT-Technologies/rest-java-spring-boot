@@ -248,6 +248,7 @@ dependencies {
     }
     implementation ("io.springfox:springfox-oas")
     implementation ("io.springfox:springfox-swagger2")
+    implementation group: 'org.springdoc', name: 'springdoc-openapi-ui', version: '1.5.10'
     implementation "io.springfox:springfox-bean-validators"
     implementation "mysql:mysql-connector-java"
     liquibaseRuntime "mysql:mysql-connector-java"
@@ -264,6 +265,7 @@ dependencies {
     testImplementation "com.h2database:h2"
     developmentOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
+
 }
 
 if (project.hasProperty("gae")) {
