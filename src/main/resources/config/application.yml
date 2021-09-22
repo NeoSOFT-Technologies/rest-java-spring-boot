@@ -23,7 +23,7 @@ management:
           ['configprops', 'env', 'health', 'info', 'jhimetrics', 'logfile', 'loggers', 'prometheus', 'threaddump', 'caches', 'liquibase']
   endpoint:
     health:
-      show-details: when_authorized
+      show-details: always
       roles: 'ROLE_ADMIN'
       probes:
         enabled: true
@@ -146,6 +146,7 @@ info:
 springdoc:
   swagger-ui:
     disable-swagger-default-url: true
+    use-root-path: true
   documentation:
     auto-startup: false
 
