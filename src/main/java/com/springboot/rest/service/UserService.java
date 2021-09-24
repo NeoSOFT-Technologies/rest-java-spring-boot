@@ -11,6 +11,7 @@ import com.springboot.rest.service.dto.AdminUserDTO;
 import com.springboot.rest.service.dto.UserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -99,7 +100,9 @@ public class UserService {
                 }
             );
     }
-    public User registerUser(AdminUserDTO userDTO, String password, boolean setActivationKey) {
+    @Value("${user-registration.setActivationKey}")
+    boolean setActivationKey;
+    public User registerUser(AdminUserDTO userDTO, String password) {
         userRepository
             .findOneByLogin(userDTO.getLogin().toLowerCase())
             .ifPresent(
