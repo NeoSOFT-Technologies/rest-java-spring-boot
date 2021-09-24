@@ -9,10 +9,6 @@ import com.springboot.rest.security.AuthoritiesConstants;
 import com.springboot.rest.security.SecurityUtils;
 import com.springboot.rest.service.dto.AdminUserDTO;
 import com.springboot.rest.service.dto.UserDTO;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.*;
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
@@ -23,6 +19,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tech.jhipster.security.RandomUtil;
+
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Service class for managing users.
@@ -98,8 +99,7 @@ public class UserService {
                 }
             );
     }
-
-    public User registerUser(AdminUserDTO userDTO, String password) {
+    public User registerUser(AdminUserDTO userDTO, String password, boolean setActivationKey) {
         userRepository
             .findOneByLogin(userDTO.getLogin().toLowerCase())
             .ifPresent(
@@ -132,10 +132,18 @@ public class UserService {
         }
         newUser.setImageUrl(userDTO.getImageUrl());
         newUser.setLangKey(userDTO.getLangKey());
-        // new user is not active
-        newUser.setActivated(false);
-        // new user gets registration key
-        newUser.setActivationKey(RandomUtil.generateActivationKey());
+
+        if(setActivationKey){
+            // new user is not active
+            newUser.setActivated(false);
+            // new user gets registration key
+            newUser.setActivationKey(RandomUtil.generateActivationKey());
+        }else{
+            //USER AUTOMATICALLY IS ACTIVATED WHEN REGISTERS
+            newUser.setActivated(true);
+            newUser.setActivationKey(null);
+        }
+
         Set<Authority> authorities = new HashSet<>();
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
