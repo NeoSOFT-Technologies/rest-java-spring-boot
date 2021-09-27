@@ -1,8 +1,8 @@
 package com.springboot.rest.service.dto;
 
 import com.springboot.rest.config.Constants;
-import com.springboot.rest.domain.Authority;
-import com.springboot.rest.domain.User;
+import com.springboot.rest.domain.AuthorityOld;
+import com.springboot.rest.domain.UserOld;
 import java.time.Instant;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -52,7 +52,7 @@ public class AdminUserDTO {
         // Empty constructor needed for Jackson.
     }
 
-    public AdminUserDTO(User user) {
+    public AdminUserDTO(UserOld user) {
         this.id = user.getId();
         this.login = user.getLogin();
         this.firstName = user.getFirstName();
@@ -65,7 +65,7 @@ public class AdminUserDTO {
         this.createdDate = user.getCreatedDate();
         this.lastModifiedBy = user.getLastModifiedBy();
         this.lastModifiedDate = user.getLastModifiedDate();
-        this.authorities = user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toSet());
+        this.authorities = user.getAuthorities().stream().map(AuthorityOld::getName).collect(Collectors.toSet());
     }
 
     public Long getId() {

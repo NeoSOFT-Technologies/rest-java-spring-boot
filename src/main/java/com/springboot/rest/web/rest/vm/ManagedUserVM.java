@@ -1,7 +1,8 @@
 package com.springboot.rest.web.rest.vm;
 
-import com.springboot.rest.service.dto.AdminUserDTO;
 import javax.validation.constraints.Size;
+
+import com.springboot.rest.domain.data.AdminUserDTO;
 
 /**
  * View Model extending the AdminUserDTO, which is meant to be used in the user management UI.

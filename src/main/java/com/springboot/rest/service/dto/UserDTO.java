@@ -1,6 +1,6 @@
 package com.springboot.rest.service.dto;
 
-import com.springboot.rest.domain.User;
+import com.springboot.rest.domain.UserOld;
 
 /**
  * A DTO representing a user, with only the public attributes.
@@ -15,7 +15,7 @@ public class UserDTO {
         // Empty constructor needed for Jackson.
     }
 
-    public UserDTO(User user) {
+    public UserDTO(UserOld user) {
         this.id = user.getId();
         // Customize it here if you need, or not, firstName/lastName/etc
         this.login = user.getLogin();

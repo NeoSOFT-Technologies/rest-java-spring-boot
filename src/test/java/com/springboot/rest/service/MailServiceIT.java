@@ -6,7 +6,7 @@ import static org.mockito.Mockito.*;
 
 import com.springboot.rest.IntegrationTest;
 import com.springboot.rest.config.Constants;
-import com.springboot.rest.domain.User;
+import com.springboot.rest.domain.UserOld;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -132,7 +132,7 @@ class MailServiceIT {
 
     @Test
     void testSendEmailFromTemplate() throws Exception {
-        User user = new User();
+        UserOld user = new UserOld();
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
         user.setLangKey("en");
@@ -148,7 +148,7 @@ class MailServiceIT {
 
     @Test
     void testSendActivationEmail() throws Exception {
-        User user = new User();
+        UserOld user = new UserOld();
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
@@ -163,7 +163,7 @@ class MailServiceIT {
 
     @Test
     void testCreationEmail() throws Exception {
-        User user = new User();
+        UserOld user = new UserOld();
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
@@ -178,7 +178,7 @@ class MailServiceIT {
 
     @Test
     void testSendPasswordResetMail() throws Exception {
-        User user = new User();
+        UserOld user = new UserOld();
         user.setLangKey(Constants.DEFAULT_LANGUAGE);
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
@@ -203,7 +203,7 @@ class MailServiceIT {
 
     @Test
     void testSendLocalizedEmailForAllSupportedLanguages() throws Exception {
-        User user = new User();
+        UserOld user = new UserOld();
         user.setLogin("john");
         user.setEmail("john.doe@example.com");
         for (String langKey : languages) {

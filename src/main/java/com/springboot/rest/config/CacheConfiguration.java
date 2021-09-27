@@ -12,6 +12,9 @@ import org.springframework.boot.info.GitProperties;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.*;
+
+import com.springboot.rest.infrastructure.repository.UserRepository;
+
 import tech.jhipster.config.JHipsterProperties;
 import tech.jhipster.config.cache.PrefixedKeyGenerator;
 
@@ -43,12 +46,12 @@ public class CacheConfiguration {
     @Bean
     public JCacheManagerCustomizer cacheManagerCustomizer() {
         return cm -> {
-            createCache(cm, com.springboot.rest.repository.UserRepository.USERS_BY_LOGIN_CACHE);
-            createCache(cm, com.springboot.rest.repository.UserRepository.USERS_BY_EMAIL_CACHE);
-            createCache(cm, com.springboot.rest.domain.User.class.getName());
-            createCache(cm, com.springboot.rest.domain.Authority.class.getName());
-            createCache(cm, com.springboot.rest.domain.User.class.getName() + ".authorities");
-            createCache(cm, com.springboot.rest.domain.A.class.getName());
+            createCache(cm, UserRepository.USERS_BY_LOGIN_CACHE);
+            createCache(cm, UserRepository.USERS_BY_EMAIL_CACHE);
+            createCache(cm, com.springboot.rest.domain.UserOld.class.getName());
+            createCache(cm, com.springboot.rest.domain.AuthorityOld.class.getName());
+            createCache(cm, com.springboot.rest.domain.UserOld.class.getName() + ".authorities");
+            createCache(cm, com.springboot.rest.domain.AOld.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

@@ -1,6 +1,5 @@
-package com.springboot.rest.repository;
+package com.springboot.rest.infrastructure.repository;
 
-import com.springboot.rest.domain.User;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -10,6 +9,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import com.springboot.rest.infrastructure.entity.User;
 
 /**
  * Spring Data JPA repository for the {@link User} entity.
