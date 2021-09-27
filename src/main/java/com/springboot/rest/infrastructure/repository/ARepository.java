@@ -1,7 +1,7 @@
 package com.springboot.rest.infrastructure.repository;
 
-import com.springboot.rest.domain.AOld;
-import org.springframework.data.jpa.repository.*;
+import com.springboot.rest.infrastructure.entity.A;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -9,4 +9,4 @@ import org.springframework.stereotype.Repository;
  */
 @SuppressWarnings("unused")
 @Repository
-public interface ARepository extends JpaRepository<AOld, Long> {}
+public interface ARepository extends JpaRepository<A, Long> {}

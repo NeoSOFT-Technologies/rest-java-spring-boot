@@ -266,6 +266,8 @@ dependencies {
     developmentOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 
+    implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.4.4'
+
 }
 
 if (project.hasProperty("gae")) {
