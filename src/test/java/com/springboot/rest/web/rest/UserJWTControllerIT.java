@@ -9,10 +9,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.springboot.rest.IntegrationTest;
-import com.springboot.rest.domain.User;
-import com.springboot.rest.repository.UserRepository;
-import com.springboot.rest.web.rest.vm.LoginVM;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -20,6 +16,11 @@ import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.springboot.rest.IntegrationTest;
+import com.springboot.rest.domain.UserOld;
+import com.springboot.rest.infrastructure.repository.UserRepository;
+import com.springboot.rest.web.rest.vm.LoginVM;
 
 /**
  * Integration tests for the {@link UserJWTController} REST controller.
@@ -40,13 +41,13 @@ class UserJWTControllerIT {
     @Test
     @Transactional
     void testAuthorize() throws Exception {
-        User user = new User();
+        UserOld user = new UserOld();
         user.setLogin("user-jwt-controller");
         user.setEmail("user-jwt-controller@example.com");
         user.setActivated(true);
         user.setPassword(passwordEncoder.encode("test"));
 
-        userRepository.saveAndFlush(user);
+//        userRepository.saveAndFlush(user);
 
         LoginVM login = new LoginVM();
         login.setUsername("user-jwt-controller");
@@ -63,13 +64,13 @@ class UserJWTControllerIT {
     @Test
     @Transactional
     void testAuthorizeWithRememberMe() throws Exception {
-        User user = new User();
+        UserOld user = new UserOld();
         user.setLogin("user-jwt-controller-remember-me");
         user.setEmail("user-jwt-controller-remember-me@example.com");
         user.setActivated(true);
         user.setPassword(passwordEncoder.encode("test"));
 
-        userRepository.saveAndFlush(user);
+//        userRepository.saveAndFlush(user);
 
         LoginVM login = new LoginVM();
         login.setUsername("user-jwt-controller-remember-me");

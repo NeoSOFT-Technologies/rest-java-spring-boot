@@ -1,27 +1,35 @@
 package com.springboot.rest.web.rest;
 
-import com.springboot.rest.domain.A;
-import com.springboot.rest.repository.ARepository;
-import com.springboot.rest.web.rest.errors.BadRequestAlertException;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
-import tech.jhipster.web.util.HeaderUtil;
-import tech.jhipster.web.util.ResponseUtil;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.springboot.rest.domain.AOld;
+import com.springboot.rest.infrastructure.repository.ARepository;
+import com.springboot.rest.web.rest.errors.BadRequestAlertException;
+
+import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.ResponseUtil;
+
 /**
- * REST controller for managing {@link com.springboot.rest.domain.A}.
+ * REST controller for managing {@link com.springboot.rest.domain.AOld}.
  */
 @RestController
 @RequestMapping("/api")
@@ -49,13 +57,12 @@ public class AResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/as")
-    @Operation(summary = "/as", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<A> createA(@RequestBody A a) throws URISyntaxException {
+    public ResponseEntity<AOld> createA(@RequestBody AOld a) throws URISyntaxException {
         log.debug("REST request to save A : {}", a);
         if (a.getId() != null) {
             throw new BadRequestAlertException("A new a cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        A result = aRepository.save(a);
+        AOld result = aRepository.save(a);
         return ResponseEntity
             .created(new URI("/api/as/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
@@ -73,8 +80,7 @@ public class AResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/as/{id}")
-    @Operation(summary = "/as", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<A> updateA(@PathVariable(value = "id", required = false) final Long id, @RequestBody A a)
+    public ResponseEntity<AOld> updateA(@PathVariable(value = "id", required = false) final Long id, @RequestBody AOld a)
         throws URISyntaxException {
         log.debug("REST request to update A : {}, {}", id, a);
         if (a.getId() == null) {
@@ -88,7 +94,7 @@ public class AResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        A result = aRepository.save(a);
+        AOld result = aRepository.save(a);
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, a.getId().toString()))
@@ -107,8 +113,7 @@ public class AResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/as/{id}", consumes = "application/merge-patch+json")
-    @Operation(summary = "/as", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<A> partialUpdateA(@PathVariable(value = "id", required = false) final Long id, @RequestBody A a)
+    public ResponseEntity<AOld> partialUpdateA(@PathVariable(value = "id", required = false) final Long id, @RequestBody AOld a)
         throws URISyntaxException {
         log.debug("REST request to partial update A partially : {}, {}", id, a);
         if (a.getId() == null) {
@@ -122,7 +127,7 @@ public class AResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<A> result = aRepository
+        Optional<AOld> result = aRepository
             .findById(a.getId())
             .map(
                 existingA -> {
@@ -156,8 +161,7 @@ public class AResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of aS in body.
      */
     @GetMapping("/as")
-    @Operation(summary = "/as", security = @SecurityRequirement(name = "bearerAuth"))
-    public List<A> getAllAS() {
+    public List<AOld> getAllAS() {
         log.debug("REST request to get all AS");
         return aRepository.findAll();
     }
@@ -169,10 +173,9 @@ public class AResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the a, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/as/{id}")
-    @Operation(summary = "/as", security = @SecurityRequirement(name = "bearerAuth"))
-    public ResponseEntity<A> getA(@PathVariable Long id) {
+    public ResponseEntity<AOld> getA(@PathVariable Long id) {
         log.debug("REST request to get A : {}", id);
-        Optional<A> a = aRepository.findById(id);
+        Optional<AOld> a = aRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(a);
     }
 
@@ -183,7 +186,6 @@ public class AResource {
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/as/{id}")
-    @Operation(summary = "/as", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<Void> deleteA(@PathVariable Long id) {
         log.debug("REST request to delete A : {}", id);
         aRepository.deleteById(id);

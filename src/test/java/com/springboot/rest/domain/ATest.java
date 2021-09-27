@@ -9,10 +9,10 @@ class ATest {
 
     @Test
     void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(A.class);
-        A a1 = new A();
+        TestUtil.equalsVerifier(AOld.class);
+        AOld a1 = new AOld();
         a1.setId(1L);
-        A a2 = new A();
+        AOld a2 = new AOld();
         a2.setId(a1.getId());
         assertThat(a1).isEqualTo(a2);
         a2.setId(2L);

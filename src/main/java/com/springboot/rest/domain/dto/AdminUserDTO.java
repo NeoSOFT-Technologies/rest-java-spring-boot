@@ -1,8 +1,9 @@
-package com.springboot.rest.service.dto;
+package com.springboot.rest.domain.dto;
 
 import com.springboot.rest.config.Constants;
-import com.springboot.rest.domain.AuthorityOld;
-import com.springboot.rest.domain.UserOld;
+import com.springboot.rest.infrastructure.entity.Authority;
+import com.springboot.rest.infrastructure.entity.User;
+
 import java.time.Instant;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -10,6 +11,7 @@ import javax.validation.constraints.*;
 
 /**
  * A DTO representing a user, with his authorities.
+ * changed
  */
 public class AdminUserDTO {
 
@@ -32,7 +34,7 @@ public class AdminUserDTO {
 
     @Size(max = 256)
     private String imageUrl;
-
+//
     private boolean activated = false;
 
     @Size(min = 2, max = 10)
@@ -52,7 +54,7 @@ public class AdminUserDTO {
         // Empty constructor needed for Jackson.
     }
 
-    public AdminUserDTO(UserOld user) {
+    public AdminUserDTO(User user) {
         this.id = user.getId();
         this.login = user.getLogin();
         this.firstName = user.getFirstName();
@@ -65,7 +67,7 @@ public class AdminUserDTO {
         this.createdDate = user.getCreatedDate();
         this.lastModifiedBy = user.getLastModifiedBy();
         this.lastModifiedDate = user.getLastModifiedDate();
-        this.authorities = user.getAuthorities().stream().map(AuthorityOld::getName).collect(Collectors.toSet());
+        this.authorities = user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toSet());
     }
 
     public Long getId() {
@@ -175,19 +177,8 @@ public class AdminUserDTO {
     // prettier-ignore
     @Override
     public String toString() {
-        return "AdminUserDTO{" +
-            "login='" + login + '\'' +
-            ", firstName='" + firstName + '\'' +
-            ", lastName='" + lastName + '\'' +
-            ", email='" + email + '\'' +
-            ", imageUrl='" + imageUrl + '\'' +
-            ", activated=" + activated +
-            ", langKey='" + langKey + '\'' +
-            ", createdBy=" + createdBy +
-            ", createdDate=" + createdDate +
-            ", lastModifiedBy='" + lastModifiedBy + '\'' +
-            ", lastModifiedDate=" + lastModifiedDate +
-            ", authorities=" + authorities +
-            "}";
+        return "AdminUserDTO{" + "login='" + login + '\'' + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", email='" + email + '\'' + ", imageUrl='" + imageUrl + '\''
+                + ", activated=" + activated + ", langKey='" + langKey + '\'' + ", createdBy=" + createdBy + ", createdDate=" + createdDate + ", lastModifiedBy='" + lastModifiedBy + '\''
+                + ", lastModifiedDate=" + lastModifiedDate + ", authorities=" + authorities + "}";
     }
 }

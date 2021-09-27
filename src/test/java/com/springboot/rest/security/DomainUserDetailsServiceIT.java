@@ -3,10 +3,8 @@ package com.springboot.rest.security;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
-import com.springboot.rest.IntegrationTest;
-import com.springboot.rest.domain.User;
-import com.springboot.rest.repository.UserRepository;
 import java.util.Locale;
+
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.springboot.rest.IntegrationTest;
+import com.springboot.rest.domain.UserOld;
+import com.springboot.rest.infrastructure.repository.UserRepository;
 
 /**
  * Integrations tests for {@link DomainUserDetailsService}.
@@ -37,7 +39,7 @@ class DomainUserDetailsServiceIT {
 
     @BeforeEach
     public void init() {
-        User userOne = new User();
+        UserOld userOne = new UserOld();
         userOne.setLogin(USER_ONE_LOGIN);
         userOne.setPassword(RandomStringUtils.random(60));
         userOne.setActivated(true);
@@ -45,9 +47,9 @@ class DomainUserDetailsServiceIT {
         userOne.setFirstName("userOne");
         userOne.setLastName("doe");
         userOne.setLangKey("en");
-        userRepository.save(userOne);
+//        userRepository.save(userOne);
 
-        User userTwo = new User();
+        UserOld userTwo = new UserOld();
         userTwo.setLogin(USER_TWO_LOGIN);
         userTwo.setPassword(RandomStringUtils.random(60));
         userTwo.setActivated(true);
@@ -55,9 +57,9 @@ class DomainUserDetailsServiceIT {
         userTwo.setFirstName("userTwo");
         userTwo.setLastName("doe");
         userTwo.setLangKey("en");
-        userRepository.save(userTwo);
+//        userRepository.save(userTwo);
 
-        User userThree = new User();
+        UserOld userThree = new UserOld();
         userThree.setLogin(USER_THREE_LOGIN);
         userThree.setPassword(RandomStringUtils.random(60));
         userThree.setActivated(false);
@@ -65,7 +67,7 @@ class DomainUserDetailsServiceIT {
         userThree.setFirstName("userThree");
         userThree.setLastName("doe");
         userThree.setLangKey("en");
-        userRepository.save(userThree);
+//        userRepository.save(userThree);
     }
 
     @Test
