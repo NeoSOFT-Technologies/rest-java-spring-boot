@@ -7,10 +7,12 @@ import com.springboot.rest.infrastructure.repository.ARepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class AJPAAdaptor implements APersistencePort {
 
     private final Logger log = LoggerFactory.getLogger(AJPAAdaptor.class);

@@ -81,16 +81,6 @@ public class AResource {
     public ResponseEntity<ADTO> updateA(@PathVariable(value = "id", required = false) final Long id, @RequestBody ADTO adto)
         throws URISyntaxException {
         log.debug("REST request to update A : {}, {}", id, adto);
-//        if (adto.getId() == null) {
-//            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-//        }
-//        if (!Objects.equals(id, adto.getId())) {
-//            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-//        }
-//
-//        if (!aService.existsById(id)) {
-//            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-//        }
 
         A a = aService.update(id,adto);
         ModelMapper modelMapper = new ModelMapper();
@@ -113,51 +103,19 @@ public class AResource {
      * or with status {@code 500 (Internal Server Error)} if the a couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-//    @PatchMapping(value = "/as/{id}", consumes = "application/merge-patch+json")
-//    public ResponseEntity<A> partialUpdateA(@PathVariable(value = "id", required = false) final Long id, @RequestBody ADTO adto)
-//        throws URISyntaxException {
-//        log.debug("REST request to partial update A partially : {}, {}", id, adto);
-//
-//        Optional<A> result= aService.patch(id,adto);
-//
-////        if (adto.getId() == null) {
-////            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-////        }
-////        if (!Objects.equals(id, adto.getId())) {
-////            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-////        }
-////
-////        if (!aService.existsById(id)) {
-////            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-////        }
-//
-////        Optional<A> result = aRepository
-////            .findById(a.getId())
-////            .map(
-////                existingA -> {
-////                    if (a.getName() != null) {
-////                        existingA.setName(a.getName());
-////                    }
-////                    if (a.getPassword() != null) {
-////                        existingA.setPassword(a.getPassword());
-////                    }
-////                    if (a.getAge() != null) {
-////                        existingA.setAge(a.getAge());
-////                    }
-////                    if (a.getPhone() != null) {
-////                        existingA.setPhone(a.getPhone());
-////                    }
-////
-////                    return existingA;
-////                }
-////            )
-////            .map(aRepository::save);
-//
-//        return ResponseUtil.wrapOrNotFound(
-//            result,
-//            HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, adto.getId().toString())
-//        );
-//    }
+    @PatchMapping(value = "/as/{id}", consumes = "application/merge-patch+json")
+    public ResponseEntity<A> partialUpdateA(@PathVariable(value = "id", required = false) final Long id, @RequestBody ADTO adto)
+            throws URISyntaxException {
+        log.debug("REST request to partial update A partially : {}, {}", id, adto);
+
+        Optional<A> result = aService.patch(id,adto);
+
+        return ResponseUtil.wrapOrNotFound(
+                result,
+                HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, adto.getId().toString())
+        );
+
+    }
 
     /**
      * {@code GET  /as} : get all the aS.
