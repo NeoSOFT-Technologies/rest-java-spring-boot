@@ -1,27 +1,18 @@
 package com.springboot.rest.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import java.time.Instant;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Consumer;
 
 import javax.persistence.EntityManager;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.Test;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.cache.CacheManager;
@@ -31,11 +22,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.springboot.rest.IntegrationTest;
-import com.springboot.rest.domain.AuthorityOld;
-import com.springboot.rest.domain.UserOld;
+import com.springboot.rest.infrastructure.entity.User;
 import com.springboot.rest.infrastructure.repository.UserRepository;
 import com.springboot.rest.security.AuthoritiesConstants;
-import com.springboot.rest.service.dto.AdminUserDTO;
 import com.springboot.rest.service.mapper.UserMapper;
 import com.springboot.rest.web.rest.vm.ManagedUserVM;
 
@@ -85,7 +74,7 @@ class UserResourceIT {
     @Autowired
     private MockMvc restUserMockMvc;
 
-    private UserOld user;
+    private User user;
 
     @BeforeEach
     public void setup() {
@@ -99,8 +88,8 @@ class UserResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which has a required relationship to the User entity.
      */
-    public static UserOld createEntity(EntityManager em) {
-        UserOld user = new UserOld();
+    public static User createEntity(EntityManager em) {
+        User user = new User();
         user.setLogin(DEFAULT_LOGIN + RandomStringUtils.randomAlphabetic(5));
         user.setPassword(RandomStringUtils.random(60));
         user.setActivated(true);
@@ -115,8 +104,8 @@ class UserResourceIT {
     /**
      * Setups the database with one user.
      */
-    public static UserOld initTestUser(UserRepository userRepository, EntityManager em) {
-        UserOld user = createEntity(em);
+    public static User initTestUser(UserRepository userRepository, EntityManager em) {
+        User user = createEntity(em);
         user.setLogin(DEFAULT_LOGIN);
         user.setEmail(DEFAULT_EMAIL);
         return user;
@@ -127,43 +116,43 @@ class UserResourceIT {
         user = initTestUser(userRepository, em);
     }
 
-//    @Test
-//    @Transactional
-//    void createUser() throws Exception {
-//        int databaseSizeBeforeCreate = userRepository.findAll().size();
-//
-//        // Create the User
-//        ManagedUserVM managedUserVM = new ManagedUserVM();
-//        managedUserVM.setLogin(DEFAULT_LOGIN);
-//        managedUserVM.setPassword(DEFAULT_PASSWORD);
-//        managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
-//        managedUserVM.setLastName(DEFAULT_LASTNAME);
-//        managedUserVM.setEmail(DEFAULT_EMAIL);
-//        managedUserVM.setActivated(true);
-//        managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
-//        managedUserVM.setLangKey(DEFAULT_LANGKEY);
-//        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
-//
-//        restUserMockMvc
-//            .perform(
-//                post("/api/admin/users").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(managedUserVM))
-//            )
-//            .andExpect(status().isCreated());
-//
-//        // Validate the User in the database
-//        assertPersistedUsers(
-//            users -> {
-//                assertThat(users).hasSize(databaseSizeBeforeCreate + 1);
-//                UserOld testUser = users.get(users.size() - 1);
-//                assertThat(testUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
-//                assertThat(testUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
-//                assertThat(testUser.getLastName()).isEqualTo(DEFAULT_LASTNAME);
-//                assertThat(testUser.getEmail()).isEqualTo(DEFAULT_EMAIL);
-//                assertThat(testUser.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
-//                assertThat(testUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
-//            }
-//        );
-//    }
+    @Test
+    @Transactional
+    void createUser() throws Exception {
+        int databaseSizeBeforeCreate = userRepository.findAll().size();
+
+        // Create the User
+        ManagedUserVM managedUserVM = new ManagedUserVM();
+        managedUserVM.setLogin(DEFAULT_LOGIN);
+        managedUserVM.setPassword(DEFAULT_PASSWORD);
+        managedUserVM.setFirstName(DEFAULT_FIRSTNAME);
+        managedUserVM.setLastName(DEFAULT_LASTNAME);
+        managedUserVM.setEmail(DEFAULT_EMAIL);
+        managedUserVM.setActivated(true);
+        managedUserVM.setImageUrl(DEFAULT_IMAGEURL);
+        managedUserVM.setLangKey(DEFAULT_LANGKEY);
+        managedUserVM.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
+
+        restUserMockMvc
+            .perform(
+                post("/api/admin/users").contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(managedUserVM))
+            )
+            .andExpect(status().isCreated());
+
+        // Validate the User in the database
+        assertPersistedUsers(
+            users -> {
+                assertThat(users).hasSize(databaseSizeBeforeCreate + 1);
+                User testUser = users.get(users.size() - 1);
+                assertThat(testUser.getLogin()).isEqualTo(DEFAULT_LOGIN);
+                assertThat(testUser.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
+                assertThat(testUser.getLastName()).isEqualTo(DEFAULT_LASTNAME);
+                assertThat(testUser.getEmail()).isEqualTo(DEFAULT_EMAIL);
+                assertThat(testUser.getImageUrl()).isEqualTo(DEFAULT_IMAGEURL);
+                assertThat(testUser.getLangKey()).isEqualTo(DEFAULT_LANGKEY);
+            }
+        );
+    }
 //
 //    @Test
 //    @Transactional
@@ -307,7 +296,7 @@ class UserResourceIT {
 //        int databaseSizeBeforeUpdate = userRepository.findAll().size();
 //
 //        // Update the user
-//        UserOld updatedUser = userRepository.findById(user.getId()).get();
+//        User updatedUser = userRepository.findById(user.getId()).get();
 //
 //        ManagedUserVM managedUserVM = new ManagedUserVM();
 //        managedUserVM.setId(updatedUser.getId());
@@ -335,7 +324,7 @@ class UserResourceIT {
 //        assertPersistedUsers(
 //            users -> {
 //                assertThat(users).hasSize(databaseSizeBeforeUpdate);
-//                UserOld testUser = users.stream().filter(usr -> usr.getId().equals(updatedUser.getId())).findFirst().get();
+//                User testUser = users.stream().filter(usr -> usr.getId().equals(updatedUser.getId())).findFirst().get();
 //                assertThat(testUser.getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
 //                assertThat(testUser.getLastName()).isEqualTo(UPDATED_LASTNAME);
 //                assertThat(testUser.getEmail()).isEqualTo(UPDATED_EMAIL);
@@ -353,7 +342,7 @@ class UserResourceIT {
 //        int databaseSizeBeforeUpdate = userRepository.findAll().size();
 //
 //        // Update the user
-//        UserOld updatedUser = userRepository.findById(user.getId()).get();
+//        User updatedUser = userRepository.findById(user.getId()).get();
 //
 //        ManagedUserVM managedUserVM = new ManagedUserVM();
 //        managedUserVM.setId(updatedUser.getId());
@@ -381,7 +370,7 @@ class UserResourceIT {
 //        assertPersistedUsers(
 //            users -> {
 //                assertThat(users).hasSize(databaseSizeBeforeUpdate);
-//                UserOld testUser = users.stream().filter(usr -> usr.getId().equals(updatedUser.getId())).findFirst().get();
+//                User testUser = users.stream().filter(usr -> usr.getId().equals(updatedUser.getId())).findFirst().get();
 //                assertThat(testUser.getLogin()).isEqualTo(UPDATED_LOGIN);
 //                assertThat(testUser.getFirstName()).isEqualTo(UPDATED_FIRSTNAME);
 //                assertThat(testUser.getLastName()).isEqualTo(UPDATED_LASTNAME);
@@ -398,7 +387,7 @@ class UserResourceIT {
 //        // Initialize the database with 2 users
 //        userRepository.saveAndFlush(user);
 //
-//        UserOld anotherUser = new UserOld();
+//        User anotherUser = new User();
 //        anotherUser.setLogin("jhipster");
 //        anotherUser.setPassword(RandomStringUtils.random(60));
 //        anotherUser.setActivated(true);
@@ -410,7 +399,7 @@ class UserResourceIT {
 //        userRepository.saveAndFlush(anotherUser);
 //
 //        // Update the user
-//        UserOld updatedUser = userRepository.findById(user.getId()).get();
+//        User updatedUser = userRepository.findById(user.getId()).get();
 //
 //        ManagedUserVM managedUserVM = new ManagedUserVM();
 //        managedUserVM.setId(updatedUser.getId());
@@ -441,7 +430,7 @@ class UserResourceIT {
 //        // Initialize the database
 //        userRepository.saveAndFlush(user);
 //
-//        UserOld anotherUser = new UserOld();
+//        User anotherUser = new User();
 //        anotherUser.setLogin("jhipster");
 //        anotherUser.setPassword(RandomStringUtils.random(60));
 //        anotherUser.setActivated(true);
@@ -453,7 +442,7 @@ class UserResourceIT {
 //        userRepository.saveAndFlush(anotherUser);
 //
 //        // Update the user
-//        UserOld updatedUser = userRepository.findById(user.getId()).get();
+//        User updatedUser = userRepository.findById(user.getId()).get();
 //
 //        ManagedUserVM managedUserVM = new ManagedUserVM();
 //        managedUserVM.setId(updatedUser.getId());
@@ -498,10 +487,10 @@ class UserResourceIT {
 //
 //    @Test
 //    void testUserEquals() throws Exception {
-//        TestUtil.equalsVerifier(UserOld.class);
-//        UserOld user1 = new UserOld();
+//        TestUtil.equalsVerifier(User.class);
+//        User user1 = new User();
 //        user1.setId(DEFAULT_ID);
-//        UserOld user2 = new UserOld();
+//        User user2 = new User();
 //        user2.setId(user1.getId());
 //        assertThat(user1).isEqualTo(user2);
 //        user2.setId(2L);
@@ -525,7 +514,7 @@ class UserResourceIT {
 //        userDTO.setLastModifiedBy(DEFAULT_LOGIN);
 //        userDTO.setAuthorities(Collections.singleton(AuthoritiesConstants.USER));
 //
-//        UserOld user = userMapper.userDTOToUser(userDTO);
+//        User user = userMapper.userDTOToUser(userDTO);
 //        assertThat(user.getId()).isEqualTo(DEFAULT_ID);
 //        assertThat(user.getLogin()).isEqualTo(DEFAULT_LOGIN);
 //        assertThat(user.getFirstName()).isEqualTo(DEFAULT_FIRSTNAME);
@@ -592,7 +581,7 @@ class UserResourceIT {
 //        assertThat(authorityA).isEqualTo(authorityB).hasSameHashCodeAs(authorityB);
 //    }
 //
-//    private void assertPersistedUsers(Consumer<List<UserOld>> userAssertion) {
-//        userAssertion.accept(userRepository.findAll());
-//    }
+    private void assertPersistedUsers(Consumer<List<User>> userAssertion) {
+        userAssertion.accept(userRepository.findAll());
+    }
 }

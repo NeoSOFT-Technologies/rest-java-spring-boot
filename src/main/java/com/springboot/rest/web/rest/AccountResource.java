@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.rest.domain.dto.AdminUserDTO;
+import com.springboot.rest.domain.dto.PasswordChangeDTO;
+import com.springboot.rest.domain.service.MailService;
 import com.springboot.rest.domain.service.UserService;
 import com.springboot.rest.infrastructure.entity.User;
 import com.springboot.rest.security.SecurityUtils;
-import com.springboot.rest.service.MailService;
-import com.springboot.rest.service.dto.PasswordChangeDTO;
 import com.springboot.rest.web.rest.errors.AccountResourceException;
 import com.springboot.rest.web.rest.errors.EmailAlreadyUsedException;
 import com.springboot.rest.web.rest.errors.InvalidPasswordException;

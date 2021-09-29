@@ -1,18 +1,24 @@
 package com.springboot.rest.service.mapper;
 
-import com.springboot.rest.domain.AuthorityOld;
-import com.springboot.rest.domain.UserOld;
-import com.springboot.rest.service.dto.AdminUserDTO;
-import com.springboot.rest.service.dto.UserDTO;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
+
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.springframework.stereotype.Service;
 
+import com.springboot.rest.domain.dto.AdminUserDTO;
+import com.springboot.rest.domain.dto.UserDTO;
+import com.springboot.rest.infrastructure.entity.Authority;
+import com.springboot.rest.infrastructure.entity.User;
+
 /**
- * Mapper for the entity {@link UserOld} and its DTO called {@link UserDTO}.
+ * Mapper for the entity {@link User} and its DTO called {@link UserDTO}.
  *
  * Normal mappers are generated using MapStruct, this one is hand-coded as MapStruct
  * support is still in beta, and requires a manual step with an IDE.
@@ -20,31 +26,31 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserMapper {
 
-    public List<UserDTO> usersToUserDTOs(List<UserOld> users) {
+    public List<UserDTO> usersToUserDTOs(List<User> users) {
         return users.stream().filter(Objects::nonNull).map(this::userToUserDTO).collect(Collectors.toList());
     }
 
-    public UserDTO userToUserDTO(UserOld user) {
+    public UserDTO userToUserDTO(User user) {
         return new UserDTO(user);
     }
 
-    public List<AdminUserDTO> usersToAdminUserDTOs(List<UserOld> users) {
+    public List<AdminUserDTO> usersToAdminUserDTOs(List<User> users) {
         return users.stream().filter(Objects::nonNull).map(this::userToAdminUserDTO).collect(Collectors.toList());
     }
 
-    public AdminUserDTO userToAdminUserDTO(UserOld user) {
+    public AdminUserDTO userToAdminUserDTO(User user) {
         return new AdminUserDTO(user);
     }
 
-    public List<UserOld> userDTOsToUsers(List<AdminUserDTO> userDTOs) {
+    public List<User> userDTOsToUsers(List<AdminUserDTO> userDTOs) {
         return userDTOs.stream().filter(Objects::nonNull).map(this::userDTOToUser).collect(Collectors.toList());
     }
 
-    public UserOld userDTOToUser(AdminUserDTO userDTO) {
+    public User userDTOToUser(AdminUserDTO userDTO) {
         if (userDTO == null) {
             return null;
         } else {
-            UserOld user = new UserOld();
+            User user = new User();
             user.setId(userDTO.getId());
             user.setLogin(userDTO.getLogin());
             user.setFirstName(userDTO.getFirstName());
@@ -53,14 +59,14 @@ public class UserMapper {
             user.setImageUrl(userDTO.getImageUrl());
             user.setActivated(userDTO.isActivated());
             user.setLangKey(userDTO.getLangKey());
-            Set<AuthorityOld> authorities = this.authoritiesFromStrings(userDTO.getAuthorities());
+            Set<Authority> authorities = this.authoritiesFromStrings(userDTO.getAuthorities());
             user.setAuthorities(authorities);
             return user;
         }
     }
 
-    private Set<AuthorityOld> authoritiesFromStrings(Set<String> authoritiesAsString) {
-        Set<AuthorityOld> authorities = new HashSet<>();
+    private Set<Authority> authoritiesFromStrings(Set<String> authoritiesAsString) {
+        Set<Authority> authorities = new HashSet<>();
 
         if (authoritiesAsString != null) {
             authorities =
@@ -68,7 +74,7 @@ public class UserMapper {
                     .stream()
                     .map(
                         string -> {
-                            AuthorityOld auth = new AuthorityOld();
+                            Authority auth = new Authority();
                             auth.setName(string);
                             return auth;
                         }
@@ -79,11 +85,11 @@ public class UserMapper {
         return authorities;
     }
 
-    public UserOld userFromId(Long id) {
+    public User userFromId(Long id) {
         if (id == null) {
             return null;
         }
-        UserOld user = new UserOld();
+        User user = new User();
         user.setId(id);
         return user;
     }
@@ -91,7 +97,7 @@ public class UserMapper {
     @Named("id")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
-    public UserDTO toDtoId(UserOld user) {
+    public UserDTO toDtoId(User user) {
         if (user == null) {
             return null;
         }
@@ -103,13 +109,13 @@ public class UserMapper {
     @Named("idSet")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
-    public Set<UserDTO> toDtoIdSet(Set<UserOld> users) {
+    public Set<UserDTO> toDtoIdSet(Set<User> users) {
         if (users == null) {
             return Collections.emptySet();
         }
 
         Set<UserDTO> userSet = new HashSet<>();
-        for (UserOld userEntity : users) {
+        for (User userEntity : users) {
             userSet.add(this.toDtoId(userEntity));
         }
 
@@ -120,7 +126,7 @@ public class UserMapper {
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "login", source = "login")
-    public UserDTO toDtoLogin(UserOld user) {
+    public UserDTO toDtoLogin(User user) {
         if (user == null) {
             return null;
         }
@@ -134,13 +140,13 @@ public class UserMapper {
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "login", source = "login")
-    public Set<UserDTO> toDtoLoginSet(Set<UserOld> users) {
+    public Set<UserDTO> toDtoLoginSet(Set<User> users) {
         if (users == null) {
             return Collections.emptySet();
         }
 
         Set<UserDTO> userSet = new HashSet<>();
-        for (UserOld userEntity : users) {
+        for (User userEntity : users) {
             userSet.add(this.toDtoLogin(userEntity));
         }
 

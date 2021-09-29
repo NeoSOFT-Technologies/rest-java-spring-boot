@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.springboot.rest.domain.AOld;
+import com.springboot.rest.infrastructure.entity.A;
 import com.springboot.rest.infrastructure.repository.ARepository;
 import com.springboot.rest.web.rest.errors.BadRequestAlertException;
 
@@ -29,7 +29,7 @@ import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
- * REST controller for managing {@link com.springboot.rest.domain.AOld}.
+ * REST controller for managing {@link com.springboot.rest.domain.A}.
  */
 @RestController
 @RequestMapping("/api")
@@ -57,12 +57,12 @@ public class AResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/as")
-    public ResponseEntity<AOld> createA(@RequestBody AOld a) throws URISyntaxException {
+    public ResponseEntity<A> createA(@RequestBody A a) throws URISyntaxException {
         log.debug("REST request to save A : {}", a);
         if (a.getId() != null) {
             throw new BadRequestAlertException("A new a cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        AOld result = aRepository.save(a);
+        A result = aRepository.save(a);
         return ResponseEntity
             .created(new URI("/api/as/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
@@ -80,7 +80,7 @@ public class AResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/as/{id}")
-    public ResponseEntity<AOld> updateA(@PathVariable(value = "id", required = false) final Long id, @RequestBody AOld a)
+    public ResponseEntity<A> updateA(@PathVariable(value = "id", required = false) final Long id, @RequestBody A a)
         throws URISyntaxException {
         log.debug("REST request to update A : {}, {}", id, a);
         if (a.getId() == null) {
@@ -94,7 +94,7 @@ public class AResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        AOld result = aRepository.save(a);
+        A result = aRepository.save(a);
         return ResponseEntity
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, false, ENTITY_NAME, a.getId().toString()))
@@ -113,7 +113,7 @@ public class AResource {
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PatchMapping(value = "/as/{id}", consumes = "application/merge-patch+json")
-    public ResponseEntity<AOld> partialUpdateA(@PathVariable(value = "id", required = false) final Long id, @RequestBody AOld a)
+    public ResponseEntity<A> partialUpdateA(@PathVariable(value = "id", required = false) final Long id, @RequestBody A a)
         throws URISyntaxException {
         log.debug("REST request to partial update A partially : {}, {}", id, a);
         if (a.getId() == null) {
@@ -127,7 +127,7 @@ public class AResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
 
-        Optional<AOld> result = aRepository
+        Optional<A> result = aRepository
             .findById(a.getId())
             .map(
                 existingA -> {
@@ -161,7 +161,7 @@ public class AResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of aS in body.
      */
     @GetMapping("/as")
-    public List<AOld> getAllAS() {
+    public List<A> getAllAS() {
         log.debug("REST request to get all AS");
         return aRepository.findAll();
     }
@@ -173,9 +173,9 @@ public class AResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the a, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/as/{id}")
-    public ResponseEntity<AOld> getA(@PathVariable Long id) {
+    public ResponseEntity<A> getA(@PathVariable Long id) {
         log.debug("REST request to get A : {}", id);
-        Optional<AOld> a = aRepository.findById(id);
+        Optional<A> a = aRepository.findById(id);
         return ResponseUtil.wrapOrNotFound(a);
     }
 

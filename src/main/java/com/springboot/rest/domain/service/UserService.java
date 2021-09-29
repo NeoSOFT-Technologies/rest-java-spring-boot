@@ -3,7 +3,6 @@ package com.springboot.rest.domain.service;
 import java.time.Instant;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,10 +20,9 @@ import com.springboot.rest.domain.port.spi.UserPersistencPort;
 import com.springboot.rest.infrastructure.entity.User;
 import com.springboot.rest.infrastructure.repository.UserRepository;
 import com.springboot.rest.security.SecurityUtils;
-import com.springboot.rest.service.EmailAlreadyUsedException;
-import com.springboot.rest.service.InvalidPasswordException;
-import com.springboot.rest.service.UsernameAlreadyUsedException;
 import com.springboot.rest.web.rest.errors.AccountResourceException;
+import com.springboot.rest.web.rest.errors.BadRequestAlertException;
+import com.springboot.rest.web.rest.errors.LoginAlreadyUsedException;
 
 import tech.jhipster.security.RandomUtil;
 
@@ -39,17 +37,11 @@ public class UserService {
 
     private final UserPersistencPort userPersistencePort;
 
-    
     private final PasswordEncoder passwordEncoder;
-
 
     private final CacheManager cacheManager;
 
-    public UserService(
-            UserPersistencPort userRepository,
-        PasswordEncoder passwordEncoder,
-        CacheManager cacheManager
-    ) {
+    public UserService(UserPersistencPort userRepository, PasswordEncoder passwordEncoder, CacheManager cacheManager) {
         this.userPersistencePort = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.cacheManager = cacheManager;
@@ -57,76 +49,53 @@ public class UserService {
 
     public Optional<User> activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);
-        return userPersistencePort
-            .findOneByActivationKey(key)
-            .map(
-                user -> {
-                    // activate given user for the registration key.
-                    user.setActivated(true);
-                    user.setActivationKey(null);
-                    this.clearUserCaches(user);
-                    log.debug("Activated user: {}", user);
-                    return user;
-                }
-            );
+        return userPersistencePort.findOneByActivationKey(key).map(user -> {
+            // activate given user for the registration key.
+            user.setActivated(true);
+            user.setActivationKey(null);
+            this.clearUserCaches(user);
+            log.debug("Activated user: {}", user);
+            return user;
+        });
     }
 
     public Optional<User> completePasswordReset(String newPassword, String key) {
         log.debug("Reset user password for reset key {}", key);
-        return userPersistencePort
-            .findOneByResetKey(key)
-            .filter(user -> user.getResetDate().isAfter(Instant.now().minusSeconds(86400)))
-            .map(
-                user -> {
-                    user.setPassword(passwordEncoder.encode(newPassword));
-                    user.setResetKey(null);
-                    user.setResetDate(null);
-                    this.clearUserCaches(user);
-                    return user;
-                }
-            );
+        return userPersistencePort.findOneByResetKey(key).filter(user -> user.getResetDate().isAfter(Instant.now().minusSeconds(86400))).map(user -> {
+            user.setPassword(passwordEncoder.encode(newPassword));
+            user.setResetKey(null);
+            user.setResetDate(null);
+            this.clearUserCaches(user);
+            return user;
+        });
     }
 
     public Optional<User> requestPasswordReset(String mail) {
-        return userPersistencePort
-            .findOneByEmailIgnoreCase(mail)
-            .filter(User::isActivated)
-            .map(
-                user -> {
-                    user.setResetKey(RandomUtil.generateResetKey());
-                    user.setResetDate(Instant.now());
-                    this.clearUserCaches(user);
-                    return user;
-                }
-            );
+        return userPersistencePort.findOneByEmailIgnoreCase(mail).filter(User::isActivated).map(user -> {
+            user.setResetKey(RandomUtil.generateResetKey());
+            user.setResetDate(Instant.now());
+            this.clearUserCaches(user);
+            return user;
+        });
     }
 
     public User registerUser(AdminUserDTO userDTO, String password) {
-        userPersistencePort
-            .findOneByLogin(userDTO.getLogin().toLowerCase())
-            .ifPresent(
-                existingUser -> {
-                    boolean removed = removeNonActivatedUser(existingUser);
-                    if (!removed) {
-                        throw new UsernameAlreadyUsedException();
-                    }
-                }
-            );
-        userPersistencePort
-            .findOneByEmailIgnoreCase(userDTO.getEmail())
-            .ifPresent(
-                existingUser -> {
-                    boolean removed = removeNonActivatedUser(existingUser);
-                    if (!removed) {
-                        throw new EmailAlreadyUsedException();
-                    }
-                }
-            );
-        
-      return   userPersistencePort.save(userDTO,password);
-      
-      
-//        log.debug("Created Information for User: {}", newUser);
+        userPersistencePort.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
+            boolean removed = removeNonActivatedUser(existingUser);
+            if (!removed) {
+                throw new UsernameAlreadyUsedException();
+            }
+        });
+        userPersistencePort.findOneByEmailIgnoreCase(userDTO.getEmail()).ifPresent(existingUser -> {
+            boolean removed = removeNonActivatedUser(existingUser);
+            if (!removed) {
+                throw new EmailAlreadyUsedException();
+            }
+        });
+
+        return userPersistencePort.save(userDTO, password);
+
+        // log.debug("Created Information for User: {}", newUser);
     }
 
     private boolean removeNonActivatedUser(User existingUser) {
@@ -139,66 +108,58 @@ public class UserService {
     }
 
     public User createUser(AdminUserDTO userDTO) {
-        
-       return userPersistencePort.createUser(userDTO);
-//        log.debug("Created Information for User: {}", user);
+
+        if (userDTO.getId() != null) {
+            throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement", "idexists");
+            // Lowercase the user login before comparing with database
+        } else if (userPersistencePort.findOneByLogin(userDTO.getLogin().toLowerCase()).isPresent()) {
+            throw new LoginAlreadyUsedException();
+        } else if (userPersistencePort.findOneByEmailIgnoreCase(userDTO.getEmail()).isPresent()) {
+            throw new EmailAlreadyUsedException();
+        } else {
+            return userPersistencePort.createUser(userDTO);
+
+        }
+        // log.debug("Created Information for User: {}", user);
     }
 
     /**
      * Update all information for a specific user, and return the modified user.
      *
-     * @param userDTO user to update.
+     * @param userDTO
+     *            user to update.
      * @return updated user.
      */
     public Optional<AdminUserDTO> updateUser(AdminUserDTO userDTO) {
-        return Optional
-            .of(userPersistencePort.findById(userDTO.getId()))
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .map(
-                user -> {
-                    this.clearUserCaches(user);
-                    user.setLogin(userDTO.getLogin().toLowerCase());
-                    user.setFirstName(userDTO.getFirstName());
-                    user.setLastName(userDTO.getLastName());
-                    if (userDTO.getEmail() != null) {
-                        user.setEmail(userDTO.getEmail().toLowerCase());
-                    }
-                    user.setImageUrl(userDTO.getImageUrl());
-                    user.setActivated(userDTO.isActivated());
-                    user.setLangKey(userDTO.getLangKey());
-                    Set<com.springboot.rest.infrastructure.entity.Authority> managedAuthorities = user.getAuthorities();
-                    managedAuthorities.clear();
-//                    userDTO
-//                        .getAuthorities()
-//                        .stream()
-//                        .map(authorityRepository::findById)
-//                        .filter(Optional::isPresent)
-//                        .map(Optional::get)
-//                        .forEach(managedAuthorities::add);
-                    this.clearUserCaches(user);
-                    log.debug("Changed Information for User: {}", user);
-                    return user;
-                }
-            )
-            .map(AdminUserDTO::new);
+
+        Optional<User> existingUser = userPersistencePort.findOneByEmailIgnoreCase(userDTO.getEmail());
+        if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
+            throw new EmailAlreadyUsedException();
+        }
+        existingUser = userPersistencePort.findOneByLogin(userDTO.getLogin().toLowerCase());
+        if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
+            throw new LoginAlreadyUsedException();
+        }
+
+        return Optional.of(userPersistencePort.findById(userDTO.getId())).filter(Optional::isPresent).map(Optional::get).map(user -> {
+            this.clearUserCaches(user);
+            userPersistencePort.update(userDTO, user);
+            this.clearUserCaches(user);
+            log.debug("Changed Information for User: {}", user);
+            return user;
+        }).map(AdminUserDTO::new);
     }
 
     public void deleteUser(String login) {
-        userPersistencePort
-            .findOneByLogin(login)
-            .ifPresent(
-                user -> {
-                    userPersistencePort.delete(user);
-                    this.clearUserCaches(user);
-                    log.debug("Deleted User: {}", user);
-                }
-            );
+        userPersistencePort.findOneByLogin(login).ifPresent(user -> {
+            userPersistencePort.delete(user);
+            this.clearUserCaches(user);
+            log.debug("Deleted User: {}", user);
+        });
     }
 
-    
-    public void saveAccount(AdminUserDTO userDTO,String userLogin) {
-        
+    public void saveAccount(AdminUserDTO userDTO, String userLogin) {
+
         Optional<User> existingUser = userPersistencePort.findOneByEmailIgnoreCase(userDTO.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userLogin))) {
             throw new EmailAlreadyUsedException();
@@ -207,60 +168,51 @@ public class UserService {
         if (!user.isPresent()) {
             throw new AccountResourceException("User could not be found");
         }
-        updateUser(
-            userDTO.getFirstName(),
-            userDTO.getLastName(),
-            userDTO.getEmail(),
-            userDTO.getLangKey(),
-            userDTO.getImageUrl()
-        );
-        
+        updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(), userDTO.getLangKey(), userDTO.getImageUrl());
+
     }
+
     /**
-     * Update basic information (first name, last name, email, language) for the current user.
+     * Update basic information (first name, last name, email, language) for the
+     * current user.
      *
-     * @param firstName first name of user.
-     * @param lastName  last name of user.
-     * @param email     email id of user.
-     * @param langKey   language key.
-     * @param imageUrl  image URL of user.
+     * @param firstName
+     *            first name of user.
+     * @param lastName
+     *            last name of user.
+     * @param email
+     *            email id of user.
+     * @param langKey
+     *            language key.
+     * @param imageUrl
+     *            image URL of user.
      */
     public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
-        SecurityUtils
-            .getCurrentUserLogin()
-            .flatMap(userPersistencePort::findOneByLogin)
-            .ifPresent(
-                user -> {
-                    user.setFirstName(firstName);
-                    user.setLastName(lastName);
-                    if (email != null) {
-                        user.setEmail(email.toLowerCase());
-                    }
-                    user.setLangKey(langKey);
-                    user.setImageUrl(imageUrl);
-                    this.clearUserCaches(user);
-                    log.debug("Changed Information for User: {}", user);
-                }
-            );
+        SecurityUtils.getCurrentUserLogin().flatMap(userPersistencePort::findOneByLogin).ifPresent(user -> {
+            user.setFirstName(firstName);
+            user.setLastName(lastName);
+            if (email != null) {
+                user.setEmail(email.toLowerCase());
+            }
+            user.setLangKey(langKey);
+            user.setImageUrl(imageUrl);
+            this.clearUserCaches(user);
+            log.debug("Changed Information for User: {}", user);
+        });
     }
 
     @Transactional
     public void changePassword(String currentClearTextPassword, String newPassword) {
-        SecurityUtils
-            .getCurrentUserLogin()
-            .flatMap(userPersistencePort::findOneByLogin)
-            .ifPresent(
-                user -> {
-                    String currentEncryptedPassword = user.getPassword();
-                    if (!passwordEncoder.matches(currentClearTextPassword, currentEncryptedPassword)) {
-                        throw new InvalidPasswordException();
-                    }
-                    String encryptedPassword = passwordEncoder.encode(newPassword);
-                    user.setPassword(encryptedPassword);
-                    this.clearUserCaches(user);
-                    log.debug("Changed password for User: {}", user);
-                }
-            );
+        SecurityUtils.getCurrentUserLogin().flatMap(userPersistencePort::findOneByLogin).ifPresent(user -> {
+            String currentEncryptedPassword = user.getPassword();
+            if (!passwordEncoder.matches(currentClearTextPassword, currentEncryptedPassword)) {
+                throw new InvalidPasswordException();
+            }
+            String encryptedPassword = passwordEncoder.encode(newPassword);
+            user.setPassword(encryptedPassword);
+            this.clearUserCaches(user);
+            log.debug("Changed password for User: {}", user);
+        });
     }
 
     @Transactional(readOnly = true)
@@ -290,25 +242,24 @@ public class UserService {
      */
     @Scheduled(cron = "0 0 1 * * ?")
     public void removeNotActivatedUsers() {
-        userPersistencePort
-            .findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore()
-            .forEach(
-                user -> {
-                    log.debug("Deleting not activated user {}", user.getLogin());
-                    userPersistencePort.delete(user);
-                    this.clearUserCaches(user);
-                }
-            );
+        userPersistencePort.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore().forEach(user -> {
+            log.debug("Deleting not activated user {}", user.getLogin());
+            userPersistencePort.delete(user);
+            this.clearUserCaches(user);
+        });
     }
 
     /**
      * Gets a list of all the authorities.
+     * 
      * @return a list of all the authorities.
      */
-//    @Transactional(readOnly = true)
-//    public List<String> getAuthorities() {
-//        return authorityRepository.findAll().stream().map(Authority::getName).collect(Collectors.toList());
-//    }
+   
+
+    @Transactional(readOnly = true)
+    public Page<UserDTO> getAllPublicUsers(Pageable pageable) {
+        return userPersistencePort.getAllPublicUsers(pageable);
+    }
 
     private void clearUserCaches(User user) {
         Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evict(user.getLogin());
@@ -316,5 +267,5 @@ public class UserService {
             Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
         }
     }
-   
+
 }

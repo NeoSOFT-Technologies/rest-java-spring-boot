@@ -1,10 +1,11 @@
-package com.springboot.rest.service;
+package com.springboot.rest.domain.service;
 
-import com.springboot.rest.domain.UserOld;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
+
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
@@ -15,6 +16,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
+
+import com.springboot.rest.infrastructure.entity.User;
+
 import tech.jhipster.config.JHipsterProperties;
 
 /**
@@ -78,7 +82,7 @@ public class MailService {
     }
 
     @Async
-    public void sendEmailFromTemplate(UserOld user, String templateName, String titleKey) {
+    public void sendEmailFromTemplate(User user, String templateName, String titleKey) {
         if (user.getEmail() == null) {
             log.debug("Email doesn't exist for user '{}'", user.getLogin());
             return;
@@ -93,19 +97,19 @@ public class MailService {
     }
 
     @Async
-    public void sendActivationEmail(UserOld user) {
+    public void sendActivationEmail(User user) {
         log.debug("Sending activation email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/activationEmail", "email.activation.title");
     }
 
     @Async
-    public void sendCreationEmail(UserOld user) {
+    public void sendCreationEmail(User user) {
         log.debug("Sending creation email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/creationEmail", "email.activation.title");
     }
 
     @Async
-    public void sendPasswordResetMail(UserOld user) {
+    public void sendPasswordResetMail(User user) {
         log.debug("Sending password reset email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/passwordResetEmail", "email.reset.title");
     }
