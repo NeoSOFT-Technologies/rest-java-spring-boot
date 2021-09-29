@@ -1,22 +1,8 @@
 package com.springboot.rest.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
-
-import javax.persistence.EntityManager;
-
+import com.springboot.rest.IntegrationTest;
+import com.springboot.rest.infrastructure.entity.A;
+import com.springboot.rest.infrastructure.repository.ARepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +12,15 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.springboot.rest.IntegrationTest;
-import com.springboot.rest.domain.AOld;
-import com.springboot.rest.infrastructure.repository.ARepository;
+import javax.persistence.EntityManager;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link AResource} REST controller.
@@ -65,7 +57,7 @@ class AResourceIT {
     @Autowired
     private MockMvc restAMockMvc;
 
-    private AOld a;
+    private A a;
 
     /**
      * Create an entity for this test.
@@ -73,8 +65,8 @@ class AResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static AOld createEntity(EntityManager em) {
-        AOld a = new AOld().name(DEFAULT_NAME).password(DEFAULT_PASSWORD).age(DEFAULT_AGE).phone(DEFAULT_PHONE);
+    public static A createEntity(EntityManager em) {
+        A a = new A().name(DEFAULT_NAME).password(DEFAULT_PASSWORD).age(DEFAULT_AGE).phone(DEFAULT_PHONE);
         return a;
     }
 
@@ -84,8 +76,8 @@ class AResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static AOld createUpdatedEntity(EntityManager em) {
-        AOld a = new AOld().name(UPDATED_NAME).password(UPDATED_PASSWORD).age(UPDATED_AGE).phone(UPDATED_PHONE);
+    public static A createUpdatedEntity(EntityManager em) {
+        A a = new A().name(UPDATED_NAME).password(UPDATED_PASSWORD).age(UPDATED_AGE).phone(UPDATED_PHONE);
         return a;
     }
 
@@ -104,9 +96,9 @@ class AResourceIT {
             .andExpect(status().isCreated());
 
         // Validate the A in the database
-        List<AOld> aList = aRepository.findAll();
+        List<A> aList = aRepository.findAll();
         assertThat(aList).hasSize(databaseSizeBeforeCreate + 1);
-        AOld testA = aList.get(aList.size() - 1);
+        A testA = aList.get(aList.size() - 1);
         assertThat(testA.getName()).isEqualTo(DEFAULT_NAME);
         assertThat(testA.getPassword()).isEqualTo(DEFAULT_PASSWORD);
         assertThat(testA.getAge()).isEqualTo(DEFAULT_AGE);
@@ -127,7 +119,7 @@ class AResourceIT {
             .andExpect(status().isBadRequest());
 
         // Validate the A in the database
-        List<AOld> aList = aRepository.findAll();
+        List<A> aList = aRepository.findAll();
         assertThat(aList).hasSize(databaseSizeBeforeCreate);
     }
 
@@ -183,7 +175,7 @@ class AResourceIT {
         int databaseSizeBeforeUpdate = aRepository.findAll().size();
 
         // Update the a
-        AOld updatedA = aRepository.findById(a.getId()).get();
+        A updatedA = aRepository.findById(a.getId()).get();
         // Disconnect from session so that the updates on updatedA are not directly saved in db
         em.detach(updatedA);
         updatedA.name(UPDATED_NAME).password(UPDATED_PASSWORD).age(UPDATED_AGE).phone(UPDATED_PHONE);
@@ -197,9 +189,9 @@ class AResourceIT {
             .andExpect(status().isOk());
 
         // Validate the A in the database
-        List<AOld> aList = aRepository.findAll();
+        List<A> aList = aRepository.findAll();
         assertThat(aList).hasSize(databaseSizeBeforeUpdate);
-        AOld testA = aList.get(aList.size() - 1);
+        A testA = aList.get(aList.size() - 1);
         assertThat(testA.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testA.getPassword()).isEqualTo(UPDATED_PASSWORD);
         assertThat(testA.getAge()).isEqualTo(UPDATED_AGE);
@@ -220,7 +212,7 @@ class AResourceIT {
             .andExpect(status().isBadRequest());
 
         // Validate the A in the database
-        List<AOld> aList = aRepository.findAll();
+        List<A> aList = aRepository.findAll();
         assertThat(aList).hasSize(databaseSizeBeforeUpdate);
     }
 
@@ -240,7 +232,7 @@ class AResourceIT {
             .andExpect(status().isBadRequest());
 
         // Validate the A in the database
-        List<AOld> aList = aRepository.findAll();
+        List<A> aList = aRepository.findAll();
         assertThat(aList).hasSize(databaseSizeBeforeUpdate);
     }
 
@@ -256,7 +248,7 @@ class AResourceIT {
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the A in the database
-        List<AOld> aList = aRepository.findAll();
+        List<A> aList = aRepository.findAll();
         assertThat(aList).hasSize(databaseSizeBeforeUpdate);
     }
 
@@ -269,7 +261,7 @@ class AResourceIT {
         int databaseSizeBeforeUpdate = aRepository.findAll().size();
 
         // Update the a using partial update
-        AOld partialUpdatedA = new AOld();
+        A partialUpdatedA = new A();
         partialUpdatedA.setId(a.getId());
 
         partialUpdatedA.name(UPDATED_NAME);
@@ -283,9 +275,9 @@ class AResourceIT {
             .andExpect(status().isOk());
 
         // Validate the A in the database
-        List<AOld> aList = aRepository.findAll();
+        List<A> aList = aRepository.findAll();
         assertThat(aList).hasSize(databaseSizeBeforeUpdate);
-        AOld testA = aList.get(aList.size() - 1);
+        A testA = aList.get(aList.size() - 1);
         assertThat(testA.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testA.getPassword()).isEqualTo(DEFAULT_PASSWORD);
         assertThat(testA.getAge()).isEqualTo(DEFAULT_AGE);
@@ -301,7 +293,7 @@ class AResourceIT {
         int databaseSizeBeforeUpdate = aRepository.findAll().size();
 
         // Update the a using partial update
-        AOld partialUpdatedA = new AOld();
+        A partialUpdatedA = new A();
         partialUpdatedA.setId(a.getId());
 
         partialUpdatedA.name(UPDATED_NAME).password(UPDATED_PASSWORD).age(UPDATED_AGE).phone(UPDATED_PHONE);
@@ -315,9 +307,9 @@ class AResourceIT {
             .andExpect(status().isOk());
 
         // Validate the A in the database
-        List<AOld> aList = aRepository.findAll();
+        List<A> aList = aRepository.findAll();
         assertThat(aList).hasSize(databaseSizeBeforeUpdate);
-        AOld testA = aList.get(aList.size() - 1);
+        A testA = aList.get(aList.size() - 1);
         assertThat(testA.getName()).isEqualTo(UPDATED_NAME);
         assertThat(testA.getPassword()).isEqualTo(UPDATED_PASSWORD);
         assertThat(testA.getAge()).isEqualTo(UPDATED_AGE);
@@ -340,7 +332,7 @@ class AResourceIT {
             .andExpect(status().isBadRequest());
 
         // Validate the A in the database
-        List<AOld> aList = aRepository.findAll();
+        List<A> aList = aRepository.findAll();
         assertThat(aList).hasSize(databaseSizeBeforeUpdate);
     }
 
@@ -360,7 +352,7 @@ class AResourceIT {
             .andExpect(status().isBadRequest());
 
         // Validate the A in the database
-        List<AOld> aList = aRepository.findAll();
+        List<A> aList = aRepository.findAll();
         assertThat(aList).hasSize(databaseSizeBeforeUpdate);
     }
 
@@ -376,7 +368,7 @@ class AResourceIT {
             .andExpect(status().isMethodNotAllowed());
 
         // Validate the A in the database
-        List<AOld> aList = aRepository.findAll();
+        List<A> aList = aRepository.findAll();
         assertThat(aList).hasSize(databaseSizeBeforeUpdate);
     }
 
@@ -392,7 +384,7 @@ class AResourceIT {
         restAMockMvc.perform(delete(ENTITY_API_URL_ID, a.getId()).accept(MediaType.APPLICATION_JSON)).andExpect(status().isNoContent());
 
         // Validate the database contains one less item
-        List<AOld> aList = aRepository.findAll();
+        List<A> aList = aRepository.findAll();
         assertThat(aList).hasSize(databaseSizeBeforeDelete - 1);
     }
 }
