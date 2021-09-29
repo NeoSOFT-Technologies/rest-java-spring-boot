@@ -1,4 +1,4 @@
 ## Images
-[set-up](https://user-images.githubusercontent.com/52003038/135223795-19e2ea2b-dcdf-47df-8ba7-8458cb214e00.png)
 
-[accessing-protected-apis](https://user-images.githubusercontent.com/52003038/135223803-4b5cbb49-06a0-4d9f-b52d-97315042109a.PNG)
+![set-up](https://user-images.githubusercontent.com/52003038/135224017-1d81ce1c-626d-4044-ac36-a0548ad28af5.png)
+![accessing-protected-apis](https://user-images.githubusercontent.com/52003038/135224031-7765c742-b5de-4f12-a3b8-b3919acbe06a.PNG)
