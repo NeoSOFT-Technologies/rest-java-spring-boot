@@ -1,10 +1,11 @@
-package com.springboot.rest.service;
+package com.springboot.rest.domain.service;
 
-import com.springboot.rest.domain.User;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
+
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
@@ -15,6 +16,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
+
+import com.springboot.rest.infrastructure.entity.User;
+
 import tech.jhipster.config.JHipsterProperties;
 
 /**

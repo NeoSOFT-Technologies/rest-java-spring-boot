@@ -1,7 +1,8 @@
-package com.springboot.rest.repository;
+package com.springboot.rest.infrastructure.repository;
 
-import com.springboot.rest.domain.Authority;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.springboot.rest.infrastructure.entity.Authority;
 
 /**
  * Spring Data JPA repository for the {@link Authority} entity.

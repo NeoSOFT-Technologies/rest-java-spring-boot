@@ -1,8 +1,9 @@
-package com.springboot.rest.service.dto;
+package com.springboot.rest.domain.dto;
 
 import com.springboot.rest.config.Constants;
-import com.springboot.rest.domain.Authority;
-import com.springboot.rest.domain.User;
+import com.springboot.rest.infrastructure.entity.Authority;
+import com.springboot.rest.infrastructure.entity.User;
+
 import java.time.Instant;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -10,6 +11,7 @@ import javax.validation.constraints.*;
 
 /**
  * A DTO representing a user, with his authorities.
+ * changed
  */
 public class AdminUserDTO {
 
@@ -32,7 +34,7 @@ public class AdminUserDTO {
 
     @Size(max = 256)
     private String imageUrl;
-
+//
     private boolean activated = false;
 
     @Size(min = 2, max = 10)
@@ -175,19 +177,8 @@ public class AdminUserDTO {
     // prettier-ignore
     @Override
     public String toString() {
-        return "AdminUserDTO{" +
-            "login='" + login + '\'' +
-            ", firstName='" + firstName + '\'' +
-            ", lastName='" + lastName + '\'' +
-            ", email='" + email + '\'' +
-            ", imageUrl='" + imageUrl + '\'' +
-            ", activated=" + activated +
-            ", langKey='" + langKey + '\'' +
-            ", createdBy=" + createdBy +
-            ", createdDate=" + createdDate +
-            ", lastModifiedBy='" + lastModifiedBy + '\'' +
-            ", lastModifiedDate=" + lastModifiedDate +
-            ", authorities=" + authorities +
-            "}";
+        return "AdminUserDTO{" + "login='" + login + '\'' + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", email='" + email + '\'' + ", imageUrl='" + imageUrl + '\''
+                + ", activated=" + activated + ", langKey='" + langKey + '\'' + ", createdBy=" + createdBy + ", createdDate=" + createdDate + ", lastModifiedBy='" + lastModifiedBy + '\''
+                + ", lastModifiedDate=" + lastModifiedDate + ", authorities=" + authorities + "}";
     }
 }

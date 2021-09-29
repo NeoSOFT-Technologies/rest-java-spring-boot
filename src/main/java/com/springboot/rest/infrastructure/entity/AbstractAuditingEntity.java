@@ -1,4 +1,4 @@
-package com.springboot.rest.domain;
+package com.springboot.rest.infrastructure.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;

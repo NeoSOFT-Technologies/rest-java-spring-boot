@@ -1,4 +1,4 @@
-package com.springboot.rest.domain;
+package com.springboot.rest.infrastructure.entity;
 
 import java.io.Serializable;
 import javax.persistence.*;

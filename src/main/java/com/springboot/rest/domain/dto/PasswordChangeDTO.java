@@ -1,4 +1,4 @@
-package com.springboot.rest.service.dto;
+package com.springboot.rest.domain.dto;
 
 /**
  * A DTO representing a password change required data - current and new password.

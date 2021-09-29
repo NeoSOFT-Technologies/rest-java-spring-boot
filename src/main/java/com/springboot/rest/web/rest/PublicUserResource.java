@@ -1,9 +1,9 @@
 package com.springboot.rest.web.rest;
 
-import com.springboot.rest.service.UserService;
-import com.springboot.rest.service.dto.UserDTO;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -16,43 +16,47 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import tech.jhipster.web.util.PaginationUtil;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import com.springboot.rest.domain.dto.UserDTO;
+import com.springboot.rest.domain.service.AuthorityService;
+import com.springboot.rest.domain.service.UserService;
+
+import tech.jhipster.web.util.PaginationUtil;
 
 @RestController
 @RequestMapping("/api")
 public class PublicUserResource {
 
-    private static final List<String> ALLOWED_ORDERED_PROPERTIES = Collections.unmodifiableList(
-        Arrays.asList("id", "login", "firstName", "lastName", "email", "activated", "langKey")
-    );
+    private static final List<String> ALLOWED_ORDERED_PROPERTIES = Collections.unmodifiableList(Arrays.asList("id", "login", "firstName", "lastName", "email", "activated", "langKey"));
 
     private final Logger log = LoggerFactory.getLogger(PublicUserResource.class);
 
     private final UserService userService;
+    private final AuthorityService authService;
 
-    public PublicUserResource(UserService userService) {
+    public PublicUserResource(UserService userService, AuthorityService authService) {
         this.userService = userService;
+        this.authService = authService;
     }
 
     /**
-     * {@code GET /users} : get all users with only the public informations - calling this are allowed for anyone.
+     * {@code GET /users} : get all users with only the public informations -
+     * calling this are allowed for anyone.
      *
-     * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body all users.
+     * @param pageable
+     *            the pagination information.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with
+     *         body all users.
      */
     @GetMapping("/users")
-    @Operation(summary = "/users", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<List<UserDTO>> getAllPublicUsers(Pageable pageable) {
         log.debug("REST request to get all public User names");
         if (!onlyContainsAllowedProperties(pageable)) {
             return ResponseEntity.badRequest().build();
         }
 
-        final Page<UserDTO> page = userService.getAllPublicUsers(pageable);
+        final Page<UserDTO> page = null;
+        userService.getAllPublicUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -63,11 +67,12 @@ public class PublicUserResource {
 
     /**
      * Gets a list of all roles.
+     * 
      * @return a string list of all roles.
      */
     @GetMapping("/authorities")
-    @Operation(summary = "/authorities", security = @SecurityRequirement(name = "bearerAuth"))
     public List<String> getAuthorities() {
-        return userService.getAuthorities();
+
+        return authService.getAuthorities();
     }
 }

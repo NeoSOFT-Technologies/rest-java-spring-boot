@@ -1,4 +1,4 @@
-package com.springboot.rest.service;
+package com.springboot.rest.domain.service;
 
 public class EmailAlreadyUsedException extends RuntimeException {
 

@@ -1,6 +1,6 @@
-package com.springboot.rest.service.dto;
+package com.springboot.rest.domain.dto;
 
-import com.springboot.rest.domain.User;
+import com.springboot.rest.infrastructure.entity.User;
 
 /**
  * A DTO representing a user, with only the public attributes.
