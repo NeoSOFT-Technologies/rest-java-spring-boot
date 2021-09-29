@@ -128,7 +128,33 @@ public class UserJPAAdaptor implements UserPersistencPort {
         log.debug("Created Information for User: {}", newUser);
         return newUser;
     }
-
+    public User update(AdminUserDTO userDTO,User user) {
+               
+        user.setLogin(userDTO.getLogin().toLowerCase());
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        if (user.getEmail() != null) {
+            user.setEmail(userDTO.getEmail().toLowerCase());
+        }
+        user.setImageUrl(userDTO.getImageUrl());
+        user.setActivated(userDTO.isActivated());
+        user.setLangKey(userDTO.getLangKey());
+        Set<com.springboot.rest.infrastructure.entity.Authority> managedAuthorities = user.getAuthorities();
+        managedAuthorities.clear();
+        userDTO
+            .getAuthorities()
+            .stream()
+            .map(authorityRepository::findById)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .forEach(managedAuthorities::add);
+        userRepository.save(user);
+        this.clearUserCaches(user);
+        log.debug("Changed Information for User: {}", user);
+        return user;
+    
+     
+    }
     public User createUser(AdminUserDTO userDTO) {
         User user = new User();
         user.setLogin(userDTO.getLogin().toLowerCase());
@@ -209,4 +235,21 @@ public class UserJPAAdaptor implements UserPersistencPort {
         // TODO Auto-generated method stub
         return null;
     }
+    
+  public Page<UserDTO> getAllPublicUsers(Pageable pageable) {
+      return userRepository.findAllByIdNotNullAndActivatedIsTrue(pageable).map(UserDTO::new);
+  }
+    
+    @Override
+    public Optional<User> findOneWithAuthoritiesByEmailIgnoreCase(String login) {
+      return  userRepository
+        .findOneWithAuthoritiesByEmailIgnoreCase(login)       ;
+    }
+    
+    @Override
+    public Optional<User> findOneWithAuthoritiesByLogin(String login) {
+      return  userRepository
+        .findOneWithAuthoritiesByLogin(login)       ;
+    }
+ 
 }
