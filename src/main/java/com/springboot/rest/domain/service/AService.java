@@ -59,4 +59,46 @@ public class AService {
         aPersistencePort.deleteById(id);
     }
 
+    public Optional<A> patch(Long id, ADTO adto) {
+
+        if (adto.getId() == null) {
+            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
+        }
+        if (!Objects.equals(id, adto.getId())) {
+            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
+        }
+
+        if (!aPersistencePort.existsById(id)) {
+            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
+        }
+
+        Optional<A> result = aPersistencePort
+                .findById(adto.getId())
+                .map(
+                        existingA -> {
+                            if (adto.getName() != null) {
+                                existingA.setName(adto.getName());
+                            }
+                            if (adto.getPassword() != null) {
+                                existingA.setPassword(adto.getPassword());
+                            }
+                            if (adto.getAge() != null) {
+                                existingA.setAge(adto.getAge());
+                            }
+                            if (adto.getPhone() != null) {
+                                existingA.setPhone(adto.getPhone());
+                            }
+                            return existingA;
+                        }
+                )
+                .map(updatedA->{
+                    ADTO updatedADTO = new ADTO(updatedA);
+                    aPersistencePort.save(updatedADTO);
+                    return updatedA;
+                });
+
+        return result;
+
+    }
+
 }
