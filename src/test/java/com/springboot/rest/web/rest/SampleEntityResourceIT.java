@@ -1,27 +1,25 @@
 package com.springboot.rest.web.rest;
 
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
-
-import javax.persistence.EntityManager;
-
+import com.springboot.rest.IntegrationTest;
+import com.springboot.rest.infrastructure.entity.SampleEntity;
+import com.springboot.rest.infrastructure.repository.SampleEntityRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.springboot.rest.IntegrationTest;
-import com.springboot.rest.infrastructure.entity.A;
-import com.springboot.rest.infrastructure.repository.ARepository;
+import javax.persistence.EntityManager;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
- * Integration tests for the {@link AResource} REST controller.
+ * Integration tests for the {@link SampleEntityResource} REST controller.
  */
 @IntegrationTest
 @AutoConfigureMockMvc
 @WithMockUser
-class AResourceIT {
+class SampleEntityResourceIT {
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
     private static final String UPDATED_NAME = "BBBBBBBBBB";
@@ -42,7 +40,7 @@ class AResourceIT {
     private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
-    private ARepository aRepository;
+    private SampleEntityRepository sampleEntityRepository;
 
     @Autowired
     private EntityManager em;
@@ -50,7 +48,7 @@ class AResourceIT {
     @Autowired
     private MockMvc restAMockMvc;
 
-    private A a;
+    private SampleEntity sampleEntity;
 
     /**
      * Create an entity for this test.
@@ -58,9 +56,9 @@ class AResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static A createEntity(EntityManager em) {
-        A a = new A().name(DEFAULT_NAME).password(DEFAULT_PASSWORD).age(DEFAULT_AGE).phone(DEFAULT_PHONE);
-        return a;
+    public static SampleEntity createEntity(EntityManager em) {
+        SampleEntity sampleEntity = new SampleEntity().name(DEFAULT_NAME).password(DEFAULT_PASSWORD).age(DEFAULT_AGE).phone(DEFAULT_PHONE);
+        return sampleEntity;
     }
 
     /**
@@ -69,14 +67,14 @@ class AResourceIT {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static A createUpdatedEntity(EntityManager em) {
-        A a = new A().name(UPDATED_NAME).password(UPDATED_PASSWORD).age(UPDATED_AGE).phone(UPDATED_PHONE);
-        return a;
+    public static SampleEntity createUpdatedEntity(EntityManager em) {
+        SampleEntity sampleEntity = new SampleEntity().name(UPDATED_NAME).password(UPDATED_PASSWORD).age(UPDATED_AGE).phone(UPDATED_PHONE);
+        return sampleEntity;
     }
 
     @BeforeEach
     public void initTest() {
-        a = createEntity(em);
+        sampleEntity = createEntity(em);
     }
 
 //    @Test

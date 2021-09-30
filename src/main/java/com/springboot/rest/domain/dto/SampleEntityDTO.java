@@ -1,8 +1,8 @@
 package com.springboot.rest.domain.dto;
 
-import com.springboot.rest.infrastructure.entity.A;
+import com.springboot.rest.infrastructure.entity.SampleEntity;
 
-public class ADTO {
+public class SampleEntityDTO {
 
     private Long id;
 
@@ -14,16 +14,16 @@ public class ADTO {
 
     private Integer phone;
 
-    public ADTO() {
+    public SampleEntityDTO() {
         // Empty constructor needed for Jackson.
     }
 
-    public ADTO(A a) {
-        this.id = a.getId();
-        this.name = a.getName();
-        this.password = a.getPassword();
-        this.age = a.getAge();
-        this.phone = a.getPhone();
+    public SampleEntityDTO(SampleEntity sampleEntity) {
+        this.id = sampleEntity.getId();
+        this.name = sampleEntity.getName();
+        this.password = sampleEntity.getPassword();
+        this.age = sampleEntity.getAge();
+        this.phone = sampleEntity.getPhone();
     }
 
     public Long getId() {
