@@ -111,7 +111,7 @@ class AccountResourceIT {
             .andExpect(content().string(TEST_USER_LOGIN));
     }
 
-//    @Test
+    @Test
     void testGetExistingAccount() throws Exception {
         Set<String> authorities = new HashSet<>();
         authorities.add(AuthoritiesConstants.ADMIN);
