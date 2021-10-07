@@ -1,9 +1,10 @@
 package com.springboot.rest.infrastructure.entity;
 
-import java.io.Serializable;
-import javax.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+
+import javax.persistence.*;
+import java.io.Serializable;
 
 /**
  * A A.
@@ -11,7 +12,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Entity
 @Table(name = "a")
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
-public class A implements Serializable {
+public class SampleEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -40,7 +41,7 @@ public class A implements Serializable {
         this.id = id;
     }
 
-    public A id(Long id) {
+    public SampleEntity id(Long id) {
         this.id = id;
         return this;
     }
@@ -49,7 +50,7 @@ public class A implements Serializable {
         return this.name;
     }
 
-    public A name(String name) {
+    public SampleEntity name(String name) {
         this.name = name;
         return this;
     }
@@ -62,7 +63,7 @@ public class A implements Serializable {
         return this.password;
     }
 
-    public A password(String password) {
+    public SampleEntity password(String password) {
         this.password = password;
         return this;
     }
@@ -75,7 +76,7 @@ public class A implements Serializable {
         return this.age;
     }
 
-    public A age(Integer age) {
+    public SampleEntity age(Integer age) {
         this.age = age;
         return this;
     }
@@ -88,7 +89,7 @@ public class A implements Serializable {
         return this.phone;
     }
 
-    public A phone(Integer phone) {
+    public SampleEntity phone(Integer phone) {
         this.phone = phone;
         return this;
     }
@@ -104,10 +105,10 @@ public class A implements Serializable {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof A)) {
+        if (!(o instanceof SampleEntity)) {
             return false;
         }
-        return id != null && id.equals(((A) o).id);
+        return id != null && id.equals(((SampleEntity) o).id);
     }
 
     @Override
