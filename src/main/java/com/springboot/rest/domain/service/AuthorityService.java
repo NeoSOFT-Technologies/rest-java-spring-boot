@@ -1,22 +1,22 @@
 package com.springboot.rest.domain.service;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
+import com.springboot.rest.domain.port.api.AuthorityServicePort;
+import com.springboot.rest.domain.port.spi.AuthorityPersistencePort;
+import com.springboot.rest.infrastructure.entity.Authority;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.springboot.rest.domain.port.spi.AuthorityPersistencePort;
-import com.springboot.rest.infrastructure.entity.Authority;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Service class for managing users.
  */
 @Service
 @Transactional
-public class AuthorityService {
+public class AuthorityService implements AuthorityServicePort {
 
     private final Logger log = LoggerFactory.getLogger(AuthorityService.class);
 
@@ -33,6 +33,7 @@ public class AuthorityService {
      * @return a list of all the authorities.
      */
     @Transactional(readOnly = true)
+    @Override
     public List<String> getAuthorities() {
         return authorityPersistencePort.findAll().stream().map(Authority::getName).collect(Collectors.toList());
     }

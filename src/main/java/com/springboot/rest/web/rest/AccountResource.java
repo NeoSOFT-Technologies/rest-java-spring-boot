@@ -2,8 +2,8 @@ package com.springboot.rest.web.rest;
 
 import com.springboot.rest.domain.dto.AdminUserDTO;
 import com.springboot.rest.domain.dto.PasswordChangeDTO;
-import com.springboot.rest.domain.service.MailService;
-import com.springboot.rest.domain.service.UserService;
+import com.springboot.rest.domain.port.api.MailServicePort;
+import com.springboot.rest.domain.port.api.UserServicePort;
 import com.springboot.rest.infrastructure.entity.User;
 import com.springboot.rest.security.SecurityUtils;
 import com.springboot.rest.web.rest.errors.AccountResourceException;
@@ -33,13 +33,13 @@ public class AccountResource {
 
     private final Logger log = LoggerFactory.getLogger(AccountResource.class);
 
-    private final UserService userService;
+    private final UserServicePort userServicePort;
 
-    private final MailService mailService;
+    private final MailServicePort mailServicePort;
 
-    public AccountResource(UserService userService, MailService mailService) {
-        this.userService = userService;
-        this.mailService = mailService;
+    public AccountResource(UserServicePort userServicePort, MailServicePort mailServicePort) {
+        this.userServicePort = userServicePort;
+        this.mailServicePort = mailServicePort;
     }
 
     /**
@@ -60,8 +60,8 @@ public class AccountResource {
         if (isPasswordLengthInvalid(managedUserVM.getPassword())) {
             throw new InvalidPasswordException();
         }
-        User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
-        // mailService.sendActivationEmail(user);
+        User user = userServicePort.registerUser(managedUserVM, managedUserVM.getPassword());
+        // mailServicePort.sendActivationEmail(user);
     }
 
     /**
@@ -76,7 +76,7 @@ public class AccountResource {
     @GetMapping("/activate")
     @Operation(summary = "/account", security = @SecurityRequirement(name = "bearerAuth"))
     public void activateAccount(@RequestParam(value = "key") String key) {
-        Optional<User> user = userService.activateRegistration(key);
+        Optional<User> user = userServicePort.activateRegistration(key);
         if (!user.isPresent()) {
             throw new AccountResourceException("No user was found for this activation key");
         }
@@ -107,7 +107,7 @@ public class AccountResource {
     @GetMapping("/account")
     @Operation(summary = "/account", security = @SecurityRequirement(name = "bearerAuth"))
     public AdminUserDTO getAccount() {
-        return userService.getUserWithAuthorities().map(AdminUserDTO::new).orElseThrow(() -> new AccountResourceException("User could not be found"));
+        return userServicePort.getUserWithAuthorities().map(AdminUserDTO::new).orElseThrow(() -> new AccountResourceException("User could not be found"));
     }
 
     /**
@@ -126,7 +126,7 @@ public class AccountResource {
     public void saveAccount(@Valid @RequestBody AdminUserDTO userDTO) {
         String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"));
 
-        userService.saveAccount(userDTO, userLogin);
+        userServicePort.saveAccount(userDTO, userLogin);
 
     }
 
@@ -145,7 +145,7 @@ public class AccountResource {
         if (isPasswordLengthInvalid(passwordChangeDto.getNewPassword())) {
             throw new InvalidPasswordException();
         }
-        userService.changePassword(passwordChangeDto.getCurrentPassword(), passwordChangeDto.getNewPassword());
+        userServicePort.changePassword(passwordChangeDto.getCurrentPassword(), passwordChangeDto.getNewPassword());
     }
 
     /**
@@ -158,9 +158,9 @@ public class AccountResource {
     @PostMapping(path = "/account/reset-password/init")
     @Operation(summary = "/account", security = @SecurityRequirement(name = "bearerAuth"))
     public void requestPasswordReset(@RequestBody String mail) {
-        Optional<User> user = userService.requestPasswordReset(mail);
+        Optional<User> user = userServicePort.requestPasswordReset(mail);
         if (user.isPresent()) {
-            // mailService.sendPasswordResetMail(user.get());
+            // mailServicePort.sendPasswordResetMail(user.get());
         } else {
             // Pretend the request has been successful to prevent checking which
             // emails really exist
@@ -187,7 +187,7 @@ public class AccountResource {
         if (isPasswordLengthInvalid(keyAndPassword.getNewPassword())) {
             throw new InvalidPasswordException();
         }
-        Optional<User> user = userService.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
+        Optional<User> user = userServicePort.completePasswordReset(keyAndPassword.getNewPassword(), keyAndPassword.getKey());
 
         if (!user.isPresent()) {
             throw new AccountResourceException("No user was found for this reset key");
