@@ -1,6 +1,7 @@
 package com.springboot.rest.domain.service;
 
 import com.springboot.rest.domain.dto.SampleEntityDTO;
+import com.springboot.rest.domain.port.api.SampleEntityServicePort;
 import com.springboot.rest.domain.port.spi.SampleEntityPersistencePort;
 import com.springboot.rest.infrastructure.entity.SampleEntity;
 import com.springboot.rest.web.rest.errors.BadRequestAlertException;
@@ -13,7 +14,7 @@ import java.util.Optional;
 
 @Service
 @Transactional
-public class SampleEntityService {
+public class SampleEntityService implements SampleEntityServicePort {
 
     private static final String ENTITY_NAME = "a";
 
@@ -23,10 +24,12 @@ public class SampleEntityService {
         this.sampleEntityPersistencePort = sampleEntityPersistencePort;
     }
 
+    @Override
     public SampleEntity save(SampleEntityDTO sampleEntityDTO) {
         return sampleEntityPersistencePort.save(sampleEntityDTO);
     }
 
+    @Override
     public SampleEntity update(Long id, SampleEntityDTO sampleEntityDTO) {
 
         if (sampleEntityDTO.getId() == null) {
@@ -43,22 +46,27 @@ public class SampleEntityService {
         return sampleEntityPersistencePort.save(sampleEntityDTO);
     }
 
+    @Override
     public boolean existsById(Long id) {
         return sampleEntityPersistencePort.existsById(id);
     }
 
+    @Override
     public List<SampleEntity> findAll() {
         return sampleEntityPersistencePort.findAll();
     }
 
+    @Override
     public Optional<SampleEntity> findById(Long id) {
         return sampleEntityPersistencePort.findById(id);
     }
 
+    @Override
     public void deleteById(Long id) {
         sampleEntityPersistencePort.deleteById(id);
     }
 
+    @Override
     public Optional<SampleEntity> patch(Long id, SampleEntityDTO sampleEntityDTO) {
 
         if (sampleEntityDTO.getId() == null) {

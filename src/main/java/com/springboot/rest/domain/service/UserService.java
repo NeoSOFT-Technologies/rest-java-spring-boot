@@ -1,9 +1,15 @@
 package com.springboot.rest.domain.service;
 
-import java.time.Instant;
-import java.util.Objects;
-import java.util.Optional;
-
+import com.springboot.rest.domain.dto.AdminUserDTO;
+import com.springboot.rest.domain.dto.UserDTO;
+import com.springboot.rest.domain.port.api.UserServicePort;
+import com.springboot.rest.domain.port.spi.UserPersistencPort;
+import com.springboot.rest.infrastructure.entity.User;
+import com.springboot.rest.infrastructure.repository.UserRepository;
+import com.springboot.rest.security.SecurityUtils;
+import com.springboot.rest.web.rest.errors.AccountResourceException;
+import com.springboot.rest.web.rest.errors.BadRequestAlertException;
+import com.springboot.rest.web.rest.errors.LoginAlreadyUsedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
@@ -13,25 +19,18 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.springboot.rest.domain.dto.AdminUserDTO;
-import com.springboot.rest.domain.dto.UserDTO;
-import com.springboot.rest.domain.port.spi.UserPersistencPort;
-import com.springboot.rest.infrastructure.entity.User;
-import com.springboot.rest.infrastructure.repository.UserRepository;
-import com.springboot.rest.security.SecurityUtils;
-import com.springboot.rest.web.rest.errors.AccountResourceException;
-import com.springboot.rest.web.rest.errors.BadRequestAlertException;
-import com.springboot.rest.web.rest.errors.LoginAlreadyUsedException;
-
 import tech.jhipster.security.RandomUtil;
+
+import java.time.Instant;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * Service class for managing users.
  */
 @Service
 @Transactional
-public class UserService {
+public class UserService implements UserServicePort {
 
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 
@@ -47,6 +46,7 @@ public class UserService {
         this.cacheManager = cacheManager;
     }
 
+    @Override
     public Optional<User> activateRegistration(String key) {
         log.debug("Activating user for activation key {}", key);
         return userPersistencePort.findOneByActivationKey(key).map(user -> {
@@ -59,6 +59,7 @@ public class UserService {
         });
     }
 
+    @Override
     public Optional<User> completePasswordReset(String newPassword, String key) {
         log.debug("Reset user password for reset key {}", key);
         return userPersistencePort.findOneByResetKey(key).filter(user -> user.getResetDate().isAfter(Instant.now().minusSeconds(86400))).map(user -> {
@@ -70,6 +71,7 @@ public class UserService {
         });
     }
 
+    @Override
     public Optional<User> requestPasswordReset(String mail) {
         return userPersistencePort.findOneByEmailIgnoreCase(mail).filter(User::isActivated).map(user -> {
             user.setResetKey(RandomUtil.generateResetKey());
@@ -79,6 +81,7 @@ public class UserService {
         });
     }
 
+    @Override
     public User registerUser(AdminUserDTO userDTO, String password) {
         userPersistencePort.findOneByLogin(userDTO.getLogin().toLowerCase()).ifPresent(existingUser -> {
             boolean removed = removeNonActivatedUser(existingUser);
@@ -98,7 +101,8 @@ public class UserService {
         // log.debug("Created Information for User: {}", newUser);
     }
 
-    private boolean removeNonActivatedUser(User existingUser) {
+    @Override
+    public boolean removeNonActivatedUser(User existingUser) {
         if (existingUser.isActivated()) {
             return false;
         }
@@ -107,6 +111,7 @@ public class UserService {
         return true;
     }
 
+    @Override
     public User createUser(AdminUserDTO userDTO) {
 
         if (userDTO.getId() != null) {
@@ -130,6 +135,7 @@ public class UserService {
      *            user to update.
      * @return updated user.
      */
+    @Override
     public Optional<AdminUserDTO> updateUser(AdminUserDTO userDTO) {
 
         Optional<User> existingUser = userPersistencePort.findOneByEmailIgnoreCase(userDTO.getEmail());
@@ -150,6 +156,7 @@ public class UserService {
         }).map(AdminUserDTO::new);
     }
 
+    @Override
     public void deleteUser(String login) {
         userPersistencePort.findOneByLogin(login).ifPresent(user -> {
             userPersistencePort.delete(user);
@@ -158,6 +165,7 @@ public class UserService {
         });
     }
 
+    @Override
     public void saveAccount(AdminUserDTO userDTO, String userLogin) {
 
         Optional<User> existingUser = userPersistencePort.findOneByEmailIgnoreCase(userDTO.getEmail());
@@ -187,6 +195,7 @@ public class UserService {
      * @param imageUrl
      *            image URL of user.
      */
+    @Override
     public void updateUser(String firstName, String lastName, String email, String langKey, String imageUrl) {
         SecurityUtils.getCurrentUserLogin().flatMap(userPersistencePort::findOneByLogin).ifPresent(user -> {
             user.setFirstName(firstName);
@@ -202,6 +211,7 @@ public class UserService {
     }
 
     @Transactional
+    @Override
     public void changePassword(String currentClearTextPassword, String newPassword) {
         SecurityUtils.getCurrentUserLogin().flatMap(userPersistencePort::findOneByLogin).ifPresent(user -> {
             String currentEncryptedPassword = user.getPassword();
@@ -216,21 +226,25 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public Page<com.springboot.rest.domain.dto.AdminUserDTO> getAllManagedUsers(Pageable pageable) {
+    @Override
+    public Page<AdminUserDTO> getAllManagedUsers(Pageable pageable) {
         return userPersistencePort.findAll(pageable);
     }
 
     @Transactional(readOnly = true)
+    @Override
     public Page<UserDTO> findAllByIdNotNullAndActivatedIsTrue(Pageable pageable) {
         return userPersistencePort.findAllByIdNotNullAndActivatedIsTrue(pageable);
     }
 
     @Transactional(readOnly = true)
+    @Override
     public Optional<User> getUserWithAuthoritiesByLogin(String login) {
         return userPersistencePort.getUserWithAuthoritiesByLogin(login);
     }
 
     @Transactional(readOnly = true)
+    @Override
     public Optional<User> getUserWithAuthorities() {
         return SecurityUtils.getCurrentUserLogin().flatMap(userPersistencePort::getUserWithAuthoritiesByLogin);
     }
@@ -241,6 +255,7 @@ public class UserService {
      * This is scheduled to get fired everyday, at 01:00 (am).
      */
     @Scheduled(cron = "0 0 1 * * ?")
+    @Override
     public void removeNotActivatedUsers() {
         userPersistencePort.findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore().forEach(user -> {
             log.debug("Deleting not activated user {}", user.getLogin());
@@ -257,11 +272,13 @@ public class UserService {
    
 
     @Transactional(readOnly = true)
+    @Override
     public Page<UserDTO> getAllPublicUsers(Pageable pageable) {
         return userPersistencePort.getAllPublicUsers(pageable);
     }
 
-    private void clearUserCaches(User user) {
+    @Override
+    public void clearUserCaches(User user) {
         Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evict(user.getLogin());
         if (user.getEmail() != null) {
             Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());

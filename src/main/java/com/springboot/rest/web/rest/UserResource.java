@@ -2,8 +2,8 @@ package com.springboot.rest.web.rest;
 
 import com.springboot.rest.config.Constants;
 import com.springboot.rest.domain.dto.AdminUserDTO;
-import com.springboot.rest.domain.service.MailService;
-import com.springboot.rest.domain.service.UserService;
+import com.springboot.rest.domain.port.api.MailServicePort;
+import com.springboot.rest.domain.port.api.UserServicePort;
 import com.springboot.rest.infrastructure.entity.User;
 import com.springboot.rest.security.AuthoritiesConstants;
 import com.springboot.rest.web.rest.errors.BadRequestAlertException;
@@ -78,13 +78,13 @@ public class UserResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final UserService userService;
+    private final UserServicePort userServicePort;
 
-    private final MailService mailService;
+    private final MailServicePort mailServicePort;
 
-    public UserResource(UserService userService, MailService mailService) {
-        this.userService = userService;
-        this.mailService = mailService;
+    public UserResource(UserServicePort userServicePort, MailServicePort mailServicePort) {
+        this.userServicePort = userServicePort;
+        this.mailServicePort = mailServicePort;
     }
 
     /**
@@ -111,7 +111,7 @@ public class UserResource {
     public ResponseEntity<User> createUser(@Valid @RequestBody AdminUserDTO userDTO) throws URISyntaxException {
         log.debug("REST request to save User : {}", userDTO);
 
-        User newUser = userService.createUser(userDTO);
+        User newUser = userServicePort.createUser(userDTO);
         return ResponseEntity.created(new URI("/api/admin/users/" + newUser.getLogin()))
                 .headers(HeaderUtil.createAlert(applicationName, "A user is created with identifier " + newUser.getLogin(), newUser.getLogin())).body(newUser);
     }
@@ -134,7 +134,7 @@ public class UserResource {
     public ResponseEntity<AdminUserDTO> updateUser(@Valid @RequestBody AdminUserDTO userDTO) {
         log.debug("REST request to update User : {}", userDTO);
 
-        Optional<AdminUserDTO> updatedUser = userService.updateUser(userDTO);
+        Optional<AdminUserDTO> updatedUser = userServicePort.updateUser(userDTO);
 
         return ResponseUtil.wrapOrNotFound(updatedUser, HeaderUtil.createAlert(applicationName, "A user is updated with identifier " + userDTO.getLogin(), userDTO.getLogin()));
     }
@@ -157,7 +157,7 @@ public class UserResource {
             return ResponseEntity.badRequest().build();
         }
 
-        final Page<AdminUserDTO> page =  userService.getAllManagedUsers(pageable);
+        final Page<AdminUserDTO> page =  userServicePort.getAllManagedUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -179,7 +179,7 @@ public class UserResource {
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<AdminUserDTO> getUser(@PathVariable @Pattern(regexp = Constants.LOGIN_REGEX) String login) {
         log.debug("REST request to get User : {}", login);
-        return ResponseUtil.wrapOrNotFound(userService.getUserWithAuthoritiesByLogin(login).map(AdminUserDTO::new));
+        return ResponseUtil.wrapOrNotFound(userServicePort.getUserWithAuthoritiesByLogin(login).map(AdminUserDTO::new));
     }
 
     /**
@@ -194,7 +194,7 @@ public class UserResource {
     @PreAuthorize("hasAuthority(\"" + AuthoritiesConstants.ADMIN + "\")")
     public ResponseEntity<Void> deleteUser(@PathVariable @Pattern(regexp = Constants.LOGIN_REGEX) String login) {
         log.debug("REST request to delete User: {}", login);
-        userService.deleteUser(login);
+        userServicePort.deleteUser(login);
         return ResponseEntity.noContent().headers(HeaderUtil.createAlert(applicationName, "A user is deleted with identifier " + login, login)).build();
     }
 }

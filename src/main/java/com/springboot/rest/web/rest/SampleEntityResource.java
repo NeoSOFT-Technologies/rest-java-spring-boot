@@ -1,7 +1,7 @@
 package com.springboot.rest.web.rest;
 
 import com.springboot.rest.domain.dto.SampleEntityDTO;
-import com.springboot.rest.domain.service.SampleEntityService;
+import com.springboot.rest.domain.port.api.SampleEntityServicePort;
 import com.springboot.rest.infrastructure.entity.SampleEntity;
 import com.springboot.rest.web.rest.errors.BadRequestAlertException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,10 +34,10 @@ public class SampleEntityResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final SampleEntityService sampleEntityService;
+    private final SampleEntityServicePort sampleEntityServicePort;
 
-    public SampleEntityResource(SampleEntityService sampleEntityService) {
-        this.sampleEntityService = sampleEntityService;
+    public SampleEntityResource(SampleEntityServicePort sampleEntityServicePort) {
+        this.sampleEntityServicePort = sampleEntityServicePort;
     }
 
     /**
@@ -55,7 +55,7 @@ public class SampleEntityResource {
             throw new BadRequestAlertException("A new a cannot already have an ID", ENTITY_NAME, "idexists");
         }
 
-        SampleEntity sampleEntity = sampleEntityService.save(sampleEntityDTO);
+        SampleEntity sampleEntity = sampleEntityServicePort.save(sampleEntityDTO);
         SampleEntityDTO sampleEntityDTOResponse = new SampleEntityDTO(sampleEntity);
 
         return ResponseEntity
@@ -81,7 +81,7 @@ public class SampleEntityResource {
             throws URISyntaxException {
         log.debug("REST request to update A : {}, {}", id, sampleEntityDTO);
 
-        SampleEntity sampleEntity = sampleEntityService.update(id, sampleEntityDTO);
+        SampleEntity sampleEntity = sampleEntityServicePort.update(id, sampleEntityDTO);
         SampleEntityDTO sampleEntityDTOResponse = new SampleEntityDTO(sampleEntity);
 
         return ResponseEntity
@@ -107,7 +107,7 @@ public class SampleEntityResource {
             throws URISyntaxException {
         log.debug("REST request to partial update A partially : {}, {}", id, sampleEntityDTO);
 
-        Optional<SampleEntity> result = sampleEntityService.patch(id, sampleEntityDTO);
+        Optional<SampleEntity> result = sampleEntityServicePort.patch(id, sampleEntityDTO);
 
         return ResponseUtil.wrapOrNotFound(
                 result,
@@ -126,7 +126,7 @@ public class SampleEntityResource {
     public List<SampleEntityDTO> getAllAS() {
         log.debug("REST request to get all AS");
 
-        List<SampleEntityDTO> sampleEntityDTOS = sampleEntityService.findAll()
+        List<SampleEntityDTO> sampleEntityDTOS = sampleEntityServicePort.findAll()
                 .stream()
                 .map(a -> new SampleEntityDTO(a))
                 .collect(Collectors.toList());
@@ -144,7 +144,7 @@ public class SampleEntityResource {
     @Operation(summary = "/sample-entity", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity getA(@PathVariable Long id) {
         log.debug("REST request to get A : {}", id);
-        Optional<SampleEntity> a = sampleEntityService.findById(id);
+        Optional<SampleEntity> a = sampleEntityServicePort.findById(id);
 
         return ResponseUtil.wrapOrNotFound(a);
     }
@@ -159,7 +159,7 @@ public class SampleEntityResource {
     @Operation(summary = "/sample-entity", security = @SecurityRequirement(name = "bearerAuth"))
     public ResponseEntity<Void> deleteA(@PathVariable Long id) {
         log.debug("REST request to delete A : {}", id);
-        sampleEntityService.deleteById(id);
+        sampleEntityServicePort.deleteById(id);
         return ResponseEntity
                 .noContent()
                 .headers(HeaderUtil.createEntityDeletionAlert(applicationName, false, ENTITY_NAME, id.toString()))

@@ -1,8 +1,8 @@
 package com.springboot.rest.web.rest;
 
 import com.springboot.rest.domain.dto.UserDTO;
-import com.springboot.rest.domain.service.AuthorityService;
-import com.springboot.rest.domain.service.UserService;
+import com.springboot.rest.domain.port.api.AuthorityServicePort;
+import com.springboot.rest.domain.port.api.UserServicePort;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
@@ -31,12 +31,12 @@ public class PublicUserResource {
 
     private final Logger log = LoggerFactory.getLogger(PublicUserResource.class);
 
-    private final UserService userService;
-    private final AuthorityService authService;
+    private final UserServicePort userServicePort;
+    private final AuthorityServicePort authorityServicePort;
 
-    public PublicUserResource(UserService userService, AuthorityService authService) {
-        this.userService = userService;
-        this.authService = authService;
+    public PublicUserResource(UserServicePort userServicePort, AuthorityServicePort authorityServicePort) {
+        this.userServicePort = userServicePort;
+        this.authorityServicePort = authorityServicePort;
     }
 
     /**
@@ -56,7 +56,7 @@ public class PublicUserResource {
             return ResponseEntity.badRequest().build();
         }
 
-        final Page<UserDTO> page = userService.getAllPublicUsers(pageable);
+        final Page<UserDTO> page = userServicePort.getAllPublicUsers(pageable);
         HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
         return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
     }
@@ -74,6 +74,6 @@ public class PublicUserResource {
     @Operation(summary = "/users", security = @SecurityRequirement(name = "bearerAuth"))
     public List<String> getAuthorities() {
 
-        return authService.getAuthorities();
+        return authorityServicePort.getAuthorities();
     }
 }

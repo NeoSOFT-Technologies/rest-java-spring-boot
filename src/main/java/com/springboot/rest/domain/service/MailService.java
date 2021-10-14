@@ -1,11 +1,7 @@
 package com.springboot.rest.domain.service;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Locale;
-
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-
+import com.springboot.rest.domain.port.api.MailServicePort;
+import com.springboot.rest.infrastructure.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.MessageSource;
@@ -16,10 +12,12 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring5.SpringTemplateEngine;
-
-import com.springboot.rest.infrastructure.entity.User;
-
 import tech.jhipster.config.JHipsterProperties;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import java.nio.charset.StandardCharsets;
+import java.util.Locale;
 
 /**
  * Service for sending emails.
@@ -27,7 +25,7 @@ import tech.jhipster.config.JHipsterProperties;
  * We use the {@link Async} annotation to send emails asynchronously.
  */
 @Service
-public class MailService {
+public class MailService implements MailServicePort {
 
     private final Logger log = LoggerFactory.getLogger(MailService.class);
 
@@ -56,6 +54,7 @@ public class MailService {
     }
 
     @Async
+    @Override
     public void sendEmail(String to, String subject, String content, boolean isMultipart, boolean isHtml) {
         log.debug(
             "Send email[multipart '{}' and html '{}'] to '{}' with subject '{}' and content={}",
@@ -82,6 +81,7 @@ public class MailService {
     }
 
     @Async
+    @Override
     public void sendEmailFromTemplate(User user, String templateName, String titleKey) {
         if (user.getEmail() == null) {
             log.debug("Email doesn't exist for user '{}'", user.getLogin());
@@ -97,18 +97,21 @@ public class MailService {
     }
 
     @Async
+    @Override
     public void sendActivationEmail(User user) {
         log.debug("Sending activation email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/activationEmail", "email.activation.title");
     }
 
     @Async
+    @Override
     public void sendCreationEmail(User user) {
         log.debug("Sending creation email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/creationEmail", "email.activation.title");
     }
 
     @Async
+    @Override
     public void sendPasswordResetMail(User user) {
         log.debug("Sending password reset email to '{}'", user.getEmail());
         sendEmailFromTemplate(user, "mail/passwordResetEmail", "email.reset.title");
