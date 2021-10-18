@@ -110,3 +110,5 @@ jhipster:
 # ===================================================================
 
 # application:
+user-registration:
+  setActivationKey: true
