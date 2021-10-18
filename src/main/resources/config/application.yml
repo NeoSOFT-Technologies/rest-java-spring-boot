@@ -188,4 +188,4 @@ jhipster:
 # application:
 # There is an application.yml in test module also
 user-registration:
-  setActivationKey: false
+  setActivationKey: true
