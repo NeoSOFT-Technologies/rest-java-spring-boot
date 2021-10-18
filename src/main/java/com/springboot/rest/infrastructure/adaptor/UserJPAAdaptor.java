@@ -1,17 +1,18 @@
 package com.springboot.rest.infrastructure.adaptor;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
+import com.springboot.rest.config.Constants;
+import com.springboot.rest.domain.dto.AdminUserDTO;
+import com.springboot.rest.domain.dto.UserDTO;
+import com.springboot.rest.domain.port.spi.UserPersistencPort;
+import com.springboot.rest.infrastructure.entity.Authority;
+import com.springboot.rest.infrastructure.entity.User;
+import com.springboot.rest.infrastructure.repository.AuthorityRepository;
+import com.springboot.rest.infrastructure.repository.UserRepository;
+import com.springboot.rest.security.AuthoritiesConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,19 +20,12 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.springboot.rest.config.Constants;
-import com.springboot.rest.domain.dto.AdminUserDTO;
-import com.springboot.rest.domain.dto.UserDTO;
-
-import com.springboot.rest.domain.port.spi.UserPersistencPort;
-import com.springboot.rest.infrastructure.entity.Authority;
-import com.springboot.rest.infrastructure.entity.User;
-import com.springboot.rest.infrastructure.repository.AuthorityRepository;
-import com.springboot.rest.infrastructure.repository.UserRepository;
-import com.springboot.rest.security.AuthoritiesConstants;
-
 import tech.jhipster.security.RandomUtil;
+
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Service class for managing users.
@@ -102,6 +96,9 @@ public class UserJPAAdaptor implements UserPersistencPort {
 
     }
 
+    @Value("${user-registration.setActivationKey}")
+    Boolean setActivationKey;
+
     public User save(AdminUserDTO userDTO, String password) {
 
         User newUser = new User();
@@ -116,10 +113,18 @@ public class UserJPAAdaptor implements UserPersistencPort {
         }
         newUser.setImageUrl(userDTO.getImageUrl());
         newUser.setLangKey(userDTO.getLangKey());
-        // new user is not active
-        newUser.setActivated(false);
-        // new user gets registration key
-        newUser.setActivationKey(RandomUtil.generateActivationKey());
+
+        if(setActivationKey){
+            // new user is not active
+            newUser.setActivated(false);
+            // new user gets registration key
+            newUser.setActivationKey(RandomUtil.generateActivationKey());
+        }else{
+            //USER AUTOMATICALLY IS ACTIVATED WHEN REGISTERS
+            newUser.setActivated(true);
+            newUser.setActivationKey(null);
+        }
+
         Set<Authority> authorities = new HashSet<>();
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
