@@ -1,4 +1,4 @@
-# basicSample
+# SpringBoot Rest API Boilerplate
 
 
 ## Development
