@@ -1,4 +1,4 @@
-package com.springboot.rest.swagger;
+package com.springboot.rest.config.swagger;
 
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
