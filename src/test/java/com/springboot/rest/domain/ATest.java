@@ -2,10 +2,6 @@ package com.springboot.rest.domain;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.junit.jupiter.api.Test;
-
-import com.springboot.rest.web.rest.TestUtil;
-
 class ATest {
 
 //    @Test

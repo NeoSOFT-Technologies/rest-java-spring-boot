@@ -1,6 +1,6 @@
 package com.springboot.rest.config;
 
-import com.springboot.rest.aop.logging.LoggingAspect;
+import com.springboot.rest.aop.LoggingAspect;
 import org.springframework.context.annotation.*;
 import org.springframework.core.env.Environment;
 import tech.jhipster.config.JHipsterConstants;
