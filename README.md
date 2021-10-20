@@ -103,8 +103,8 @@ Take it for a test drive. We'd love to hear any feedback you have or if you've t
 ## Project Structure
 | Name | Description |
 | ------------------------ | --------------------------------------------------------------------------------------------- |
-| **.github**              | Contains GitHub settings and configurations, including the GitHub Actions workflows  |
-| **build.gradle**         | Contains all your gradle dependencies |
+| **.github** | Contains GitHub settings and configurations, including the GitHub Actions workflows  |
+| **build.gradle** | Contains all your gradle dependencies |
 | **sonar-project.properties**| Contains sonar properties |
 | **src/main/java/com/spring/rest**| This package contains all the sub packages |
 | **src/main/java/com/spring/rest/aop**| This package contains AOP Logging (Aspect-Oriented Programming) |
@@ -128,7 +128,7 @@ Take it for a test drive. We'd love to hear any feedback you have or if you've t
 | **src/test/java/com/spring/rest**| This package contains integration tests |
 
 
-## Request Workflow
+## Request Response Workflow
 ![Project Flow](https://user-images.githubusercontent.com/52003038/138070423-cc830e96-cbef-445e-9143-a7a006d65c8b.png)
 ### Advantages
 1. Immediate implementation
@@ -136,6 +136,13 @@ Take it for a test drive. We'd love to hear any feedback you have or if you've t
 3. Possibility of changes
 4. Expected test
 5. Optimal result
+
+
+## Modules
+* Logger
+* Request Response
+* Database
+* Swagger/Open API
 
 
 ## Wiki
