@@ -93,3 +93,24 @@ Then run:
 docker-compose -f src/main/docker/app.yml up -d
 ```
 
+
+## Request Workflow
+![Project Flow](https://user-images.githubusercontent.com/52003038/138070423-cc830e96-cbef-445e-9143-a7a006d65c8b.png)
+### Advantages
+1. Immediate implementation
+2. Focus on the domain of the application
+3. Possibility of changes
+4. Expected test
+5. Optimal result
+
+## Motivation
+- With this skeleton, we can easily start a server application using Java Spring Boot.
+- Rather than spending time on the project setup, get on with the important stuff right away.
+
+Take it for a test drive. We'd love to hear any feedback you have or if you've thought of a new feature.
+
+## Wiki
+- [Project Set Up Guide](https://github.com/NeoSOFT-Technologies/rest-java-spring-boot/wiki)
+- [Clean Architecture](https://github.com/NeoSOFT-Technologies/rest-java-spring-boot/wiki/Clean-Architecture)
+- [JSON Web Tokens](https://github.com/NeoSOFT-Technologies/rest-java-spring-boot/wiki/JSON-Web-Tokens)
+- [Security](https://github.com/NeoSOFT-Technologies/rest-java-spring-boot/wiki/Security)
