@@ -93,6 +93,40 @@ Then run:
 docker-compose -f src/main/docker/app.yml up -d
 ```
 
+## Motivation
+- With this skeleton, we can easily start a server application using Java Spring Boot.
+- Rather than spending time on the project setup, get on with the important stuff right away.
+
+Take it for a test drive. We'd love to hear any feedback you have or if you've thought of a new feature.
+
+
+## Project Structure
+| Name | Description |
+| ------------------------ | --------------------------------------------------------------------------------------------- |
+| **.github**              | Contains GitHub settings and configurations, including the GitHub Actions workflows  |
+| **build.gradle**         | Contains all your gradle dependencies |
+| **sonar-project.properties**| Contains sonar properties |
+| **src/main/java/com/spring/rest**| This package contains all the sub packages |
+| **src/main/java/com/spring/rest/aop**| This package contains AOP Logging (Aspect-Oriented Programming) |
+| **src/main/java/com/spring/rest/config**| This package contains all the configuration files |
+| **src/main/java/com/spring/rest/domain**| This package contains DTOs, Ports & Service implementations |
+| **src/main/java/com/spring/rest/domain/dto**| This package contains Data Transfer Objects |
+| **src/main/java/com/spring/rest/domain/port**| This package contains Application Programming Interface (API) & Service Provider Interface (SPI) |
+| **src/main/java/com/spring/rest/domain/port/api**| This package contains the service ports for services |
+| **src/main/java/com/spring/rest/domain/port/spi**| This package contains the persistence ports for JPA Adapters |
+| **src/main/java/com/spring/rest/domain/service/**| This package contains the service implementations for service ports |
+| **src/main/java/com/spring/rest/infrastructure/**| This package contains JPA Adaptors, Entities, Repositories |
+| **src/main/java/com/spring/rest/infrastructure/adaptor**| This package contains JPA Adapters which implements Persistence Ports |
+| **src/main/java/com/spring/rest/infrastructure/entity**| This package contains the entities and their database mappings|
+| **src/main/java/com/spring/rest/infrastructure/repository**| This package contains Repositories which are extended by JpaRepository |
+| **src/main/java/com/spring/rest/mapper**| This package contains mappers for converting Entities to DTOs |
+| **src/main/java/com/spring/rest/rest**| This package contains Controllers, Custom Exceptions & VM|
+| **src/main/java/com/spring/rest/security**| This package contains  JWT & Security Utils|
+| **src/main/java/com/spring/rest/BasicSampleApp.java**| This is a sample Spring Boot Application  |
+| **src/main/java/resources/config/liquibase**| This package contains Liquibase database change logs |
+| **src/main/java/com/spring/config**| This package contains Configuration files application.yml (-dev , -prob, -tls) |
+| **src/test/java/com/spring/rest**| This package contains integration tests |
+
 
 ## Request Workflow
 ![Project Flow](https://user-images.githubusercontent.com/52003038/138070423-cc830e96-cbef-445e-9143-a7a006d65c8b.png)
@@ -103,11 +137,6 @@ docker-compose -f src/main/docker/app.yml up -d
 4. Expected test
 5. Optimal result
 
-## Motivation
-- With this skeleton, we can easily start a server application using Java Spring Boot.
-- Rather than spending time on the project setup, get on with the important stuff right away.
-
-Take it for a test drive. We'd love to hear any feedback you have or if you've thought of a new feature.
 
 ## Wiki
 - [Project Set Up Guide](https://github.com/NeoSOFT-Technologies/rest-java-spring-boot/wiki)
