@@ -103,29 +103,29 @@ Take it for a test drive. We'd love to hear any feedback you have or if you've t
 ## Project Structure
 | Name | Description |
 | ------------------------ | --------------------------------------------------------------------------------------------- |
-| **.github** | Contains GitHub settings and configurations, including the GitHub Actions workflows  |
-| **build.gradle** | Contains all your gradle dependencies |
-| **sonar-project.properties**| Contains sonar properties |
-| **src/main/java/com/spring/rest**| This package contains all the sub packages |
-| **src/main/java/com/spring/rest/aop**| This package contains AOP Logging (Aspect-Oriented Programming) |
-| **src/main/java/com/spring/rest/config**| This package contains all the configuration files |
-| **src/main/java/com/spring/rest/domain**| This package contains DTOs, Ports & Service implementations |
-| **src/main/java/com/spring/rest/domain/dto**| This package contains Data Transfer Objects |
-| **src/main/java/com/spring/rest/domain/port**| This package contains Application Programming Interface (API) & Service Provider Interface (SPI) |
-| **src/main/java/com/spring/rest/domain/port/api**| This package contains the service ports for services |
-| **src/main/java/com/spring/rest/domain/port/spi**| This package contains the persistence ports for JPA Adapters |
-| **src/main/java/com/spring/rest/domain/service/**| This package contains the service implementations for service ports |
-| **src/main/java/com/spring/rest/infrastructure/**| This package contains JPA Adaptors, Entities, Repositories |
-| **src/main/java/com/spring/rest/infrastructure/adaptor**| This package contains JPA Adapters which implements Persistence Ports |
-| **src/main/java/com/spring/rest/infrastructure/entity**| This package contains the entities and their database mappings|
-| **src/main/java/com/spring/rest/infrastructure/repository**| This package contains Repositories which are extended by JpaRepository |
-| **src/main/java/com/spring/rest/mapper**| This package contains mappers for converting Entities to DTOs |
-| **src/main/java/com/spring/rest/rest**| This package contains Controllers, Custom Exceptions & VM|
-| **src/main/java/com/spring/rest/security**| This package contains  JWT & Security Utils|
-| **src/main/java/com/spring/rest/BasicSampleApp.java**| This is a sample Spring Boot Application  |
-| **src/main/java/resources/config/liquibase**| This package contains Liquibase database change logs |
-| **src/main/java/com/spring/config**| This package contains Configuration files application.yml (-dev , -prob, -tls) |
-| **src/test/java/com/spring/rest**| This package contains integration tests |
+| [**.github**](https://github.com/NeoSOFT-Technologies/rest-java-spring-boot/tree/main/.github) | Contains GitHub settings and configurations, including the GitHub Actions workflows  |
+| [**build.gradle**](https://github.com/NeoSOFT-Technologies/rest-java-spring-boot/blob/main/build.gradle) | Contains all your gradle dependencies |
+| [**sonar-project.properties**](https://github.com/NeoSOFT-Technologies/rest-java-spring-boot/blob/main/sonar-project.properties)| Contains sonar properties |
+| [**src/main/java/com/spring/rest**](https://github.com/NeoSOFT-Technologies/rest-java-spring-boot/tree/main/src/main/java/com/springboot/rest)| This package contains all the sub packages |
+| [**src/main/java/com/spring/rest/aop**](https://github.com/NeoSOFT-Technologies/rest-java-spring-boot/tree/main/src/main/java/com/springboot/rest/aop)| This package contains AOP Logging (Aspect-Oriented Programming) |
+| [**src/main/java/com/spring/rest/config**](https://github.com/NeoSOFT-Technologies/rest-java-spring-boot/tree/main/src/main/java/com/springboot/rest/config)| This package contains all the configuration files |
+| [**src/main/java/com/spring/rest/domain**](https://github.com/NeoSOFT-Technologies/rest-java-spring-boot/tree/main/src/main/java/com/springboot/rest/domain)| This package contains DTOs, Ports & Service implementations |
+| [**src/main/java/com/spring/rest/domain/dto**](https://github.com/NeoSOFT-Technologies/rest-java-spring-boot/tree/main/src/main/java/com/springboot/rest/domain/dto)| This package contains Data Transfer Objects |
+| [**src/main/java/com/spring/rest/domain/port**](https://github.com/NeoSOFT-Technologies/rest-java-spring-boot/tree/main/src/main/java/com/springboot/rest/domain/port)| This package contains Application Programming Interface (API) & Service Provider Interface (SPI) |
+| [**src/main/java/com/spring/rest/domain/port/api**](https://github.com/NeoSOFT-Technologies/rest-java-spring-boot/tree/main/src/main/java/com/springboot/rest/domain/port/api)| This package contains the service ports for services |
+| [**src/main/java/com/spring/rest/domain/port/spi**](https://github.com/NeoSOFT-Technologies/rest-java-spring-boot/tree/main/src/main/java/com/springboot/rest/domain/port/spi)| This package contains the persistence ports for JPA Adapters |
+| [**src/main/java/com/spring/rest/domain/service/**](https://github.com/NeoSOFT-Technologies/rest-java-spring-boot/tree/main/src/main/java/com/springboot/rest/domain/service)| This package contains the service implementations for service ports |
+| [**src/main/java/com/spring/rest/infrastructure/**](https://github.com/NeoSOFT-Technologies/rest-java-spring-boot/tree/main/src/main/java/com/springboot/rest/infrastructure)| This package contains JPA Adaptors, Entities, Repositories |
+| [**src/main/java/com/spring/rest/infrastructure/adaptor**](https://github.com/NeoSOFT-Technologies/rest-java-spring-boot/tree/main/src/main/java/com/springboot/rest/infrastructure/adaptor)| This package contains JPA Adapters which implements Persistence Ports |
+| [**src/main/java/com/spring/rest/infrastructure/entity**](https://github.com/NeoSOFT-Technologies/rest-java-spring-boot/tree/main/src/main/java/com/springboot/rest/infrastructure/entity)| This package contains the entities and their database mappings|
+| [**src/main/java/com/spring/rest/infrastructure/repository**](https://github.com/NeoSOFT-Technologies/rest-java-spring-boot/tree/main/src/main/java/com/springboot/rest/infrastructure/repository)| This package contains Repositories which are extended by JpaRepository |
+| [**src/main/java/com/spring/rest/mapper**](https://github.com/NeoSOFT-Technologies/rest-java-spring-boot/tree/main/src/main/java/com/springboot/rest/mapper)| This package contains mappers for converting Entities to DTOs |
+| [**src/main/java/com/spring/rest/rest**](https://github.com/NeoSOFT-Technologies/rest-java-spring-boot/tree/main/src/main/java/com/springboot/rest/rest)| This package contains Controllers, Custom Exceptions & VM|
+| [**src/main/java/com/spring/rest/security**](https://github.com/NeoSOFT-Technologies/rest-java-spring-boot/tree/main/src/main/java/com/springboot/rest/security)| This package contains  JWT & Security Utils|
+| [**src/main/java/com/spring/rest/BasicSampleApp.java**](https://github.com/NeoSOFT-Technologies/rest-java-spring-boot/blob/main/src/main/java/com/springboot/rest/BasicSampleApp.java)| This is a sample Spring Boot Application  |
+| [**src/main/java/resources/config/liquibase**](https://github.com/NeoSOFT-Technologies/rest-java-spring-boot/tree/main/src/main/resources/config/liquibase)| This package contains Liquibase database change logs |
+| [**src/main/java/com/spring/config**](https://github.com/NeoSOFT-Technologies/rest-java-spring-boot/tree/main/src/main/resources/config)| This package contains Configuration files application.yml (-dev , -prob, -tls) |
+| [**src/test/java/com/spring/rest**](https://github.com/NeoSOFT-Technologies/rest-java-spring-boot/tree/main/src/test/java/com/springboot/rest)| This package contains integration tests |
 
 
 ## Request Response Workflow
