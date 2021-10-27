@@ -29,6 +29,8 @@ public class UserDTO {
         this.id = id;
     }
 
+    
+    
     public String getLogin() {
         return login;
     }
@@ -38,11 +40,11 @@ public class UserDTO {
     }
 
     // prettier-ignore
-    @Override
-    public String toString() {
-        return "UserDTO{" +
-            "id='" + id + '\'' +
-            ", login='" + login + '\'' +
-            "}";
-    }
+//    @Override
+//    public String toString() {
+//        return "UserDTO{" +
+//            "id='" + id + '\'' +
+//            ", login='" + login + '\'' +
+//            "}";
+//    }
 }

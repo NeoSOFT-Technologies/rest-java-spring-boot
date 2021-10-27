@@ -118,14 +118,14 @@ public class SampleEntity implements Serializable {
     }
 
     // prettier-ignore
-    @Override
-    public String toString() {
-        return "A{" +
-            "id=" + getId() +
-            ", name='" + getName() + "'" +
-            ", password='" + getPassword() + "'" +
-            ", age=" + getAge() +
-            ", phone=" + getPhone() +
-            "}";
-    }
+//    @Override
+//    public String toString() {
+//        return "A{" +
+//            "id=" + getId() +
+//            ", name='" + getName() + "'" +
+//            ", password='" + getPassword() + "'" +
+//            ", age=" + getAge() +
+//            ", phone=" + getPhone() +
+//            "}";
+//    }
 }
