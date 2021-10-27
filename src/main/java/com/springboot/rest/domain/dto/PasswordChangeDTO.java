@@ -1,16 +1,19 @@
 package com.springboot.rest.domain.dto;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * A DTO representing a password change required data - current and new password.
  */
+@Data
+@NoArgsConstructor
 public class PasswordChangeDTO {
 
     private String currentPassword;
     private String newPassword;
 
-    public PasswordChangeDTO() {
-        // Empty constructor needed for Jackson.
-    }
+ 
 
     public PasswordChangeDTO(String currentPassword, String newPassword) {
         this.currentPassword = currentPassword;

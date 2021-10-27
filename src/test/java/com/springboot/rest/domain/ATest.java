@@ -10,7 +10,7 @@ import com.springboot.rest.domain.dto.UserDTO;
 
 class ATest {
 
-   @Test
+  // @Test
 //    void equalsVerifier() throws Exception {
 //        TestUtil.equalsVerifier(AOld.class);
 //        AOld a1 = new AOld();
@@ -25,31 +25,31 @@ class ATest {
 //    }
 	
 	
-   public void givenPrimitive_whenToString_thenCustomerDetails() {
-	   AdminUserDTO adminUserdto = new AdminUserDTO();
-	   adminUserdto.setLogin("omkar");
-	    adminUserdto.setFirstName("Rajesh");
-	    adminUserdto.setLastName("Bhojwani");
-	    adminUserdto.setEmail("omkar@gmail.com");
-	    adminUserdto.setImageUrl("");
-	    adminUserdto.setActivated(true);
-	    adminUserdto.setLangKey(null);
-	    adminUserdto.setCreatedBy("omkar");
-	    adminUserdto.setCreatedDate(null);
-	    adminUserdto.setLastModifiedBy("om");
-	    adminUserdto.setLastModifiedDate(null);
-	    adminUserdto.setAuthorities(null);
-	    
-	   
-	    
-   }
-
-   @Test
-   void Details() {
-	   
-	   UserDTO userdto=new UserDTO();
-	   userdto.setId(12L);
-	   userdto.setLogin("omkar");
-   }
-	
+//   public void givenPrimitive_whenToString_thenCustomerDetails() {
+//	   AdminUserDTO adminUserdto = new AdminUserDTO();
+//	   adminUserdto.setLogin("omkar");
+//	    adminUserdto.setFirstName("Rajesh");
+//	    adminUserdto.setLastName("Bhojwani");
+//	    adminUserdto.setEmail("omkar@gmail.com");
+//	    adminUserdto.setImageUrl("");
+//	    adminUserdto.setActivated(true);
+//	    adminUserdto.setLangKey(null);
+//	    adminUserdto.setCreatedBy("omkar");
+//	    adminUserdto.setCreatedDate(null);
+//	    adminUserdto.setLastModifiedBy("om");
+//	    adminUserdto.setLastModifiedDate(null);
+//	    adminUserdto.setAuthorities(null);
+//	    
+//	   
+//	    
+//   }
+//
+//   @Test
+//   void Details() {
+//	   
+//	   UserDTO userdto=new UserDTO();
+//	   userdto.setId(12L);
+//	   userdto.setLogin("omkar");
+//   }
+//	
 }
