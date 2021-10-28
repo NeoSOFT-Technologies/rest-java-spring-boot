@@ -195,9 +195,9 @@ class AccountResourceIT {
         assertThat(user).isEmpty();
     }
 
-    @ParameterizedTest
+    @Test
     @Transactional
-    void testRegisterInvalidEmail(String s2) throws Exception {
+    void testRegisterInvalidEmail() throws Exception {
         ManagedUserVM invalidUser = new ManagedUserVM();
         invalidUser.setLogin("bob");
         invalidUser.setPassword("password");
@@ -217,9 +217,9 @@ class AccountResourceIT {
         assertThat(user).isEmpty();
     }
 
-    @ParameterizedTest
+    @Test
     @Transactional
-    void testRegisterInvalidPassword(String s) throws Exception {
+    void testRegisterInvalidPassword() throws Exception {
         ManagedUserVM invalidUser = new ManagedUserVM();
         invalidUser.setLogin("bob");
         invalidUser.setPassword("123"); // password with only 3 digits
@@ -239,7 +239,7 @@ class AccountResourceIT {
         assertThat(user).isEmpty();
     }
 
-    @ParameterizedTest
+    @Test
     @Transactional
     void testRegisterNullPassword() throws Exception {
         ManagedUserVM invalidUser = new ManagedUserVM();
