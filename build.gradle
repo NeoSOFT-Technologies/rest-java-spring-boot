@@ -3,11 +3,7 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-  compileOnly 'org.projectlombok:lombok:1.18.22'
-	annotationProcessor 'org.projectlombok:lombok:1.18.22'
-	
-	testCompileOnly 'org.projectlombok:lombok:1.18.22'
-	testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
+    
     }
 }
 
@@ -270,6 +266,11 @@ dependencies {
     developmentOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
 
+  compileOnly 'org.projectlombok:lombok:1.18.22'
+	 annotationProcessor 'org.projectlombok:lombok:1.18.22'
+	
+	 testCompileOnly 'org.projectlombok:lombok:1.18.22'
+	 testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
 }
 
 if (project.hasProperty("gae")) {
