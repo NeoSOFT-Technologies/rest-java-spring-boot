@@ -1,6 +1,9 @@
 package com.springboot.rest.domain.dto;
 
+import java.util.List;
+
 import com.springboot.rest.infrastructure.entity.SampleEntity;
+import com.springboot.rest.infrastructure.entity.SampleEntityAuxiliary;
 
 public class SampleEntityDTO {
 
@@ -13,6 +16,8 @@ public class SampleEntityDTO {
     private Integer age;
 
     private Integer phone;
+    
+//    private List<SampleEntityAuxiliary> seAuxList;
 
     public SampleEntityDTO() {
         // Empty constructor needed for Jackson.
@@ -26,7 +31,20 @@ public class SampleEntityDTO {
         this.phone = sampleEntity.getPhone();
     }
 
-    public Long getId() {
+    /*
+    public SampleEntityDTO(Long id, String name, String password, Integer age, Integer phone,
+			List<SampleEntityAuxiliary> seAuxList) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.password = password;
+		this.age = age;
+		this.phone = phone;
+		this.seAuxList = seAuxList;
+	}
+	*/
+
+	public Long getId() {
         return id;
     }
 
@@ -66,7 +84,14 @@ public class SampleEntityDTO {
         this.phone = phone;
     }
 
-    @Override
+	/*
+	 * public List<SampleEntityAuxiliary> getSeAuxList() { return seAuxList; }
+	 * 
+	 * public void setSeAuxList(List<SampleEntityAuxiliary> seAuxList) {
+	 * this.seAuxList = seAuxList; }
+	 */
+
+	@Override
     public String toString() {
         return "ADTO{" +
                 "id=" + id +

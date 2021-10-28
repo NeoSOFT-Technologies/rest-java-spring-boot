@@ -3,13 +3,16 @@ package com.springboot.rest.rest;
 import com.springboot.rest.domain.dto.SampleEntityDTO;
 import com.springboot.rest.domain.port.api.SampleEntityServicePort;
 import com.springboot.rest.infrastructure.entity.SampleEntity;
+import com.springboot.rest.mapper.SampleEntityMapperMapStruct;
 import com.springboot.rest.rest.errors.BadRequestAlertException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
@@ -23,6 +26,7 @@ import java.util.stream.Collectors;
 /**
  * REST controller for managing {@link SampleEntity}.
  */
+// @Component
 @RestController
 @RequestMapping("/api")
 public class SampleEntityResource {
@@ -35,10 +39,20 @@ public class SampleEntityResource {
     private String applicationName;
 
     private final SampleEntityServicePort sampleEntityServicePort;
-
+    
     public SampleEntityResource(SampleEntityServicePort sampleEntityServicePort) {
         this.sampleEntityServicePort = sampleEntityServicePort;
     }
+    
+    /*
+    // testing with mapper: initialize Mapper Class
+	private final SampleEntityMapper sampleEntityMapper;
+
+    public SampleEntityResource(SampleEntityServicePort sampleEntityServicePort, SampleEntityMapper sampleEntityMapper) {
+        this.sampleEntityServicePort = sampleEntityServicePort;
+        this.sampleEntityMapper = sampleEntityMapper;
+    }
+    */
 
     /**
      * {@code POST  /sample-entity} : Create a new a.

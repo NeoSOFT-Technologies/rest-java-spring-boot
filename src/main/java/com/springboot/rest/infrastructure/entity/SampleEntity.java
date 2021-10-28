@@ -5,6 +5,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * A A.
@@ -31,7 +32,16 @@ public class SampleEntity implements Serializable {
 
     @Column(name = "phone")
     private Integer phone;
-
+    
+	/*
+	 * @Column(name = "seaux_list")
+	 * 
+	 * @ElementCollection(targetClass=Integer.class)
+	 * 
+	 * @OneToMany(targetEntity=SampleEntityAuxiliary.class, mappedBy="sampleEntity",
+	 * fetch=FetchType.EAGER) private List<SampleEntityAuxiliary> seAux;
+	 */
+    
     // jhipster-needle-entity-add-field - JHipster will add fields here
     public Long getId() {
         return id;
@@ -97,10 +107,20 @@ public class SampleEntity implements Serializable {
     public void setPhone(Integer phone) {
         this.phone = phone;
     }
-
+   
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
-    @Override
+	/*
+	 * public SampleEntity seAux(List<SampleEntityAuxiliary> seAux) { this.seAux =
+	 * seAux; return this; }
+	 * 
+	 * public List<SampleEntityAuxiliary> getSeAux() { return seAux; }
+	 * 
+	 * public void setSeAux(List<SampleEntityAuxiliary> seAux) { this.seAux = seAux;
+	 * }
+	 */
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

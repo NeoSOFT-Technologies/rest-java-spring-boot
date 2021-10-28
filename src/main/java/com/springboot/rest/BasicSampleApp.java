@@ -20,6 +20,9 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import com.springboot.rest.config.ApplicationProperties;
+import com.springboot.rest.domain.port.api.SampleEntityServicePort;
+import com.springboot.rest.infrastructure.repository.SampleEntityRepository;
+import com.springboot.rest.mapper.SampleEntityMapperMapStruct;
 
 import tech.jhipster.config.DefaultProfileUtil;
 import tech.jhipster.config.JHipsterConstants;
@@ -74,6 +77,7 @@ public class BasicSampleApp {
         SpringApplication app = new SpringApplication(BasicSampleApp.class);
         DefaultProfileUtil.addDefaultProfile(app);
         Environment env = app.run(args).getEnvironment();
+        
         logApplicationStartup(env);
     }
 
