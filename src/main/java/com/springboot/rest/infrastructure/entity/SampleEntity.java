@@ -5,6 +5,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import lombok.Data;
 
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -14,6 +15,7 @@ import java.io.Serializable;
 @Entity
 @Data
 @Table(name = "a")
+
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class SampleEntity implements Serializable {
 
@@ -75,5 +77,10 @@ public class SampleEntity implements Serializable {
         return id != null && id.equals(((SampleEntity) o).id);
     }
 
+    @Override
+    public int hashCode() {
+        // see https://vladmihalcea.com/how-to-implement-equals-and-hashcode-using-the-jpa-entity-identifier/
+        return getClass().hashCode();
+    }
 
 }

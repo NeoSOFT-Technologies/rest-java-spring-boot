@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import com.springboot.rest.infrastructure.entity.User;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode
 public class UserDTO {
 
     private Long id;

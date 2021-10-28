@@ -5,6 +5,7 @@ import com.springboot.rest.config.Constants;
 
 import lombok.Data;
 
+
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
@@ -27,6 +28,7 @@ import org.hibernate.annotations.CacheConcurrencyStrategy;
 @Table(name = "jhi_user")
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Data
+
 public class User extends AbstractAuditingEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -114,6 +116,10 @@ public class User extends AbstractAuditingEntity implements Serializable {
         }
         return id != null && id.equals(((User) o).id);
     }
-
+    @Override
+    public int hashCode() {
+       
+        return getClass().hashCode();
+    }
 
 }

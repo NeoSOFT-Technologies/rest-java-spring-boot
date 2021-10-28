@@ -5,6 +5,7 @@ import com.springboot.rest.infrastructure.entity.Authority;
 import com.springboot.rest.infrastructure.entity.User;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.time.Instant;
@@ -18,6 +19,7 @@ import javax.validation.constraints.*;
  */
 @Data
 @NoArgsConstructor
+@EqualsAndHashCode
 public class AdminUserDTO {
 
     private Long id;
