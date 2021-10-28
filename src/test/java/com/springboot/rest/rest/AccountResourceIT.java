@@ -18,8 +18,6 @@ import com.springboot.rest.rest.vm.ManagedUserVM;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,6 +33,8 @@ import java.time.Instant;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
+
+import javax.validation.constraints.AssertTrue;
 
 import static com.springboot.rest.rest.AccountResourceIT.TEST_USER_LOGIN;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -835,4 +835,6 @@ class AccountResourceIT {
             )
             .andExpect(status().isInternalServerError());
     }
+    
+    
 }
