@@ -18,6 +18,8 @@ import com.springboot.rest.rest.vm.ManagedUserVM;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -193,9 +195,9 @@ class AccountResourceIT {
         assertThat(user).isEmpty();
     }
 
-    @Test
+    @ParameterizedTest
     @Transactional
-    void testRegisterInvalidEmail() throws Exception {
+    void testRegisterInvalidEmail(String s2) throws Exception {
         ManagedUserVM invalidUser = new ManagedUserVM();
         invalidUser.setLogin("bob");
         invalidUser.setPassword("password");
@@ -215,9 +217,9 @@ class AccountResourceIT {
         assertThat(user).isEmpty();
     }
 
-    @Test
+    @ParameterizedTest
     @Transactional
-    void testRegisterInvalidPassword() throws Exception {
+    void testRegisterInvalidPassword(String s) throws Exception {
         ManagedUserVM invalidUser = new ManagedUserVM();
         invalidUser.setLogin("bob");
         invalidUser.setPassword("123"); // password with only 3 digits
@@ -237,7 +239,7 @@ class AccountResourceIT {
         assertThat(user).isEmpty();
     }
 
-    @Test
+    @ParameterizedTest
     @Transactional
     void testRegisterNullPassword() throws Exception {
         ManagedUserVM invalidUser = new ManagedUserVM();
