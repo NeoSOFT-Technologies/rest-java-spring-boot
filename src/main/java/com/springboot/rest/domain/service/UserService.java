@@ -98,7 +98,7 @@ public class UserService implements UserServicePort {
 
         return userPersistencePort.save(userDTO, password);
 
-        // log.debug("Created Information for User: {}", newUser);
+       
     }
 
     @Override
@@ -125,7 +125,7 @@ public class UserService implements UserServicePort {
             return userPersistencePort.createUser(userDTO);
 
         }
-        // log.debug("Created Information for User: {}", user);
+       
     }
 
     /**

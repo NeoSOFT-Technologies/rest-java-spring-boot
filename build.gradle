@@ -34,7 +34,7 @@ assert System.properties["java.specification.version"] == "1.8" || "1.9" || "10"
 apply from: "gradle/docker.gradle"
 apply from: "gradle/sonar.gradle"
 //jhipster-needle-gradle-apply-from - JHipster will add additional gradle scripts to be applied here
-
+apply plugin: "eclipse"
 if (project.hasProperty("prod") || project.hasProperty("gae")) {
     apply from: "gradle/profile_prod.gradle"
 } else {
@@ -136,7 +136,7 @@ liquibase {
             driver "com.mysql.cj.jdbc.Driver"
             url "jdbc:mysql://localhost:3306/basicSample"
             username "root"
-            password ""
+            password "Ravikiran@123"
             changeLogFile "src/main/resources/config/liquibase/master.xml"
             defaultSchemaName "basicSample"
             logLevel "debug"
@@ -146,7 +146,7 @@ liquibase {
             driver "com.mysql.cj.jdbc.Driver"
             url "jdbc:mysql://localhost:3306/basicSample"
             username "root"
-            password ""
+            password "Ravikiran@123"
             changeLogFile project.ext.diffChangelogFile
             referenceUrl "hibernate:spring:com.springboot.rest.domain?dialect=org.hibernate.dialect.MySQL8Dialect&hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy"
             defaultSchemaName "basicSample"

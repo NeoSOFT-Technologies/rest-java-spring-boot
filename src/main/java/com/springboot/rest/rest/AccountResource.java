@@ -35,11 +35,11 @@ public class AccountResource {
 
     private final UserServicePort userServicePort;
 
-    private final MailServicePort mailServicePort;
+   
 
-    public AccountResource(UserServicePort userServicePort, MailServicePort mailServicePort) {
+    public AccountResource(UserServicePort userServicePort) {
         this.userServicePort = userServicePort;
-        this.mailServicePort = mailServicePort;
+       
     }
 
     /**
@@ -61,7 +61,7 @@ public class AccountResource {
             throw new InvalidPasswordException();
         }
         User user = userServicePort.registerUser(managedUserVM, managedUserVM.getPassword());
-        // mailServicePort.sendActivationEmail(user);
+     
     }
 
     /**
@@ -160,11 +160,8 @@ public class AccountResource {
     public void requestPasswordReset(@RequestBody String mail) {
         Optional<User> user = userServicePort.requestPasswordReset(mail);
         if (user.isPresent()) {
-            // mailServicePort.sendPasswordResetMail(user.get());
+        	  log.warn("Password reset requested for existing mail");
         } else {
-            // Pretend the request has been successful to prevent checking which
-            // emails really exist
-            // but log that an invalid attempt has been made
             log.warn("Password reset requested for non existing mail");
         }
     }
