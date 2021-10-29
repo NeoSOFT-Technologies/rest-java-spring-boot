@@ -9,12 +9,14 @@ import java.util.Optional;
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.StringUtils;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -31,6 +33,14 @@ import tech.jhipster.config.JHipsterConstants;
 @EnableJpaRepositories
 @EnableConfigurationProperties({ LiquibaseProperties.class, ApplicationProperties.class })
 public class BasicSampleApp {
+	
+	// Creating ModelMapper Bean for DTO Mapping
+	//////////// ########### /////////////
+	@Bean
+	public ModelMapper modelMapper() {
+		return new ModelMapper();
+	}
+	////////////########### /////////////
 
     private static final Logger log = LoggerFactory.getLogger(BasicSampleApp.class);
 
