@@ -41,7 +41,7 @@ public class UserMapper {
 
 	////////////////////////// 1. Using ModelMapper library /////////////////////
 	// Entity to DTO Mapping
-	private UserDTO entityToDto(User user) {
+	public UserDTO entityToDto(User user) {
 		return modelMapper.map(user, UserDTO.class);
 	}
 	
@@ -59,7 +59,7 @@ public class UserMapper {
     }
 	
 	// DTO to entity Mapping
-	private User dtoToEntity(UserDTO userDTO) {
+	public User dtoToEntity(UserDTO userDTO) {
 		return modelMapper.map(userDTO, User.class);
 	}
 	

@@ -38,7 +38,7 @@ public class SampleEntityMapper {
 
 	////////////////////////// 1. Using ModelMapper library /////////////////////
 	// Entity to DTO Mapping
-	private SampleEntityDTO entityToDto(SampleEntity sampleEntity) {
+	public SampleEntityDTO entityToDto(SampleEntity sampleEntity) {
 		return modelMapper.map(sampleEntity, SampleEntityDTO.class);
 	}
 	
@@ -47,7 +47,7 @@ public class SampleEntityMapper {
     }
 	
 	// DTO to entity Mapping
-	private SampleEntity dtoToEntity(SampleEntityDTO sampleEntityDTO) {
+	public SampleEntity dtoToEntity(SampleEntityDTO sampleEntityDTO) {
 		return modelMapper.map(sampleEntityDTO, SampleEntity.class);
 	}
 	

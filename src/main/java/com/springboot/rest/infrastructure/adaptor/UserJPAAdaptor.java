@@ -179,28 +179,7 @@ public class UserJPAAdaptor implements UserPersistencPort {
 			Set<Authority> authorities = userDTO.getAuthorities().stream().map(authorityRepository::findById)
 					.filter(Optional::isPresent).map(Optional::get).collect(Collectors.toSet());
 			user.setAuthorities(authorities);
-		}
-		
-		
-		// Hard-coded mapping
-		/*
-		 * // User user = new User(); user.setLogin(userDTO.getLogin().toLowerCase());
-		 * user.setFirstName(userDTO.getFirstName());
-		 * user.setLastName(userDTO.getLastName()); if (userDTO.getEmail() != null) {
-		 * user.setEmail(userDTO.getEmail().toLowerCase()); }
-		 * user.setImageUrl(userDTO.getImageUrl()); if (userDTO.getLangKey() == null) {
-		 * user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language } else {
-		 * user.setLangKey(userDTO.getLangKey()); } String encryptedPassword =
-		 * passwordEncoder.encode(RandomUtil.generatePassword());
-		 * user.setPassword(encryptedPassword);
-		 * user.setResetKey(RandomUtil.generateResetKey());
-		 * user.setResetDate(Instant.now()); user.setActivated(true); if
-		 * (userDTO.getAuthorities() != null) { Set<Authority> authorities =
-		 * userDTO.getAuthorities().stream().map(authorityRepository::findById)
-		 * .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toSet());
-		 * user.setAuthorities(authorities); }
-		 */
-		 
+		}	 
         
         userRepository.save(user);
         this.clearUserCaches(user);
@@ -256,7 +235,7 @@ public class UserJPAAdaptor implements UserPersistencPort {
 
     @Override
     public Page<UserDTO> getAllUsers(Pageable pageable) {
-        // TODO Auto-generated method stub
+        
         return null;
     }
     
