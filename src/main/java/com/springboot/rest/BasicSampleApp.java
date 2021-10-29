@@ -17,14 +17,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.env.Environment;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import com.springboot.rest.config.ApplicationProperties;
-import com.springboot.rest.domain.port.api.SampleEntityServicePort;
-import com.springboot.rest.infrastructure.repository.SampleEntityRepository;
-import com.springboot.rest.mapper.SampleEntityMapperMapStruct;
 
 import tech.jhipster.config.DefaultProfileUtil;
 import tech.jhipster.config.JHipsterConstants;

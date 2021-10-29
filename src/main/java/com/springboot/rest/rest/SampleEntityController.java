@@ -19,7 +19,6 @@ import com.springboot.rest.domain.dto.SampleEntityDTO;
 import com.springboot.rest.domain.port.api.SampleEntityServicePort;
 import com.springboot.rest.infrastructure.entity.SampleEntity;
 import com.springboot.rest.infrastructure.repository.SampleEntityRepository;
-import com.springboot.rest.mapper.SampleEntityMapperMapStruct;
 
 @RestController
 @RequestMapping("/myapi")
