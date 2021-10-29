@@ -49,7 +49,7 @@ class UserMapperTest {
         users.add(user);
         users.add(null);
 
-        List<UserDTO> userDTOS = userMapper.usersToUserDTOs(users);
+        List<UserDTO> userDTOS = userMapper.entitiesToDtos(users);
 
         assertThat(userDTOS).isNotEmpty().size().isEqualTo(1);
     }
@@ -60,7 +60,7 @@ class UserMapperTest {
         usersDto.add(userDto);
         usersDto.add(null);
 
-        List<User> users = userMapper.userDTOsToUsers(usersDto);
+        List<User> users = userMapper.adminUserDtosToUserEntities(usersDto);
 
         assertThat(users).isNotEmpty().size().isEqualTo(1);
     }
@@ -74,7 +74,7 @@ class UserMapperTest {
         List<AdminUserDTO> usersDto = new ArrayList<>();
         usersDto.add(userDto);
 
-        List<User> users = userMapper.userDTOsToUsers(usersDto);
+        List<User> users = userMapper.adminUserDtosToUserEntities(usersDto);
 
         assertThat(users).isNotEmpty().size().isEqualTo(1);
         assertThat(users.get(0).getAuthorities()).isNotNull();
@@ -89,7 +89,7 @@ class UserMapperTest {
         List<AdminUserDTO> usersDto = new ArrayList<>();
         usersDto.add(userDto);
 
-        List<User> users = userMapper.userDTOsToUsers(usersDto);
+        List<User> users = userMapper.adminUserDtosToUserEntities(usersDto);
 
         assertThat(users).isNotEmpty().size().isEqualTo(1);
         assertThat(users.get(0).getAuthorities()).isNotNull();
@@ -102,7 +102,7 @@ class UserMapperTest {
         authoritiesAsString.add("ADMIN");
         userDto.setAuthorities(authoritiesAsString);
 
-        User user = userMapper.userDTOToUser(userDto);
+        User user = userMapper.adminUserDtoToUserEntity(userDto);
 
         assertThat(user).isNotNull();
         assertThat(user.getAuthorities()).isNotNull();
@@ -114,7 +114,7 @@ class UserMapperTest {
     void userDTOToUserMapWithNullAuthoritiesStringShouldReturnUserWithEmptyAuthorities() {
         userDto.setAuthorities(null);
 
-        User user = userMapper.userDTOToUser(userDto);
+        User user = userMapper.adminUserDtoToUserEntity(userDto);
 
         assertThat(user).isNotNull();
         assertThat(user.getAuthorities()).isNotNull();
@@ -123,7 +123,7 @@ class UserMapperTest {
 
     @Test
     void userDTOToUserMapWithNullUserShouldReturnNull() {
-        assertThat(userMapper.userDTOToUser(null)).isNull();
+        assertThat(userMapper.dtoToEntity(null)).isNull();
     }
 
     @Test
