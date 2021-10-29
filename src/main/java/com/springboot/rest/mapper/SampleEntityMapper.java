@@ -104,7 +104,7 @@ public class SampleEntityMapper {
         return authorities;
     }
 
-    public SampleEntity userFromId(Long id) {
+    public SampleEntity sampleEntityFromId(Long id) {
         if (id == null) {
             return null;
         }

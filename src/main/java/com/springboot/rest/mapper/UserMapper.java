@@ -11,6 +11,7 @@ import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import com.springboot.rest.domain.dto.AdminUserDTO;
@@ -49,7 +50,7 @@ public class UserMapper {
     }
     
     // User to AdminUserDTO Mapping
-	private AdminUserDTO userEntityToAdminUserDto(User user) {
+	public AdminUserDTO userEntityToAdminUserDto(User user) {
 		return modelMapper.map(user, AdminUserDTO.class);
 	}
 	
@@ -64,6 +65,15 @@ public class UserMapper {
 	
     public List<User> dtosToEntities(List<UserDTO> userDTOs) {
         return userDTOs.stream().filter(Objects::nonNull).map(this::dtoToEntity).collect(Collectors.toList());
+    }
+    
+    // AdminUserDTO to User Mapping
+	public User adminUserDtoToUserEntity(AdminUserDTO adminUserDto) {
+		return modelMapper.map(adminUserDto, User.class);
+	}
+	
+    public List<User> adminUserDtosToUserEntities(List<AdminUserDTO> adminUserDtos) {
+        return adminUserDtos.stream().filter(Objects::nonNull).map(this::adminUserDtoToUserEntity).collect(Collectors.toList());
     }
 	
     //////////////////////////2. Hard-coded way /////////////////////

@@ -126,6 +126,10 @@ public class AccountResource {
     public void saveAccount(@Valid @RequestBody AdminUserDTO userDTO) {
         String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"));
 
+        // UserDTO to User conversion
+        User user = new User();
+        
+        
         userServicePort.saveAccount(userDTO, userLogin);
 
     }

@@ -8,6 +8,7 @@ import com.springboot.rest.infrastructure.entity.Authority;
 import com.springboot.rest.infrastructure.entity.User;
 import com.springboot.rest.infrastructure.repository.AuthorityRepository;
 import com.springboot.rest.infrastructure.repository.UserRepository;
+import com.springboot.rest.mapper.UserMapper;
 import com.springboot.rest.security.AuthoritiesConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,10 +44,13 @@ public class UserJPAAdaptor implements UserPersistencPort {
     private final PasswordEncoder passwordEncoder;
 
     private final CacheManager cacheManager;
+    
+    private final UserMapper userMapper;
 
-    public UserJPAAdaptor(PasswordEncoder passwordEncoder, CacheManager cacheManager) {
+    public UserJPAAdaptor(PasswordEncoder passwordEncoder, CacheManager cacheManager, UserMapper userMapper) {
         this.passwordEncoder = passwordEncoder;
         this.cacheManager = cacheManager;
+        this.userMapper = userMapper;
     }
 
     public Optional<User> findOneByActivationKey(String key) {
@@ -83,17 +87,14 @@ public class UserJPAAdaptor implements UserPersistencPort {
 
     public Optional<User> findOneByLogin(String login) {
         return userRepository.findOneByLogin(login);
-
     }
 
     public Optional<User> findOneByEmailIgnoreCase(String email) {
         return userRepository.findOneByEmailIgnoreCase(email);
-
     }
 
     public Optional<User> findById(Long id) {
         return userRepository.findById(id);
-
     }
 
     @Value("${user-registration.setActivationKey}")
@@ -101,49 +102,46 @@ public class UserJPAAdaptor implements UserPersistencPort {
 
     public User save(AdminUserDTO userDTO, String password) {
 
-        User newUser = new User();
+        // UserDTO to User conversion
+    	User newUser = userMapper.adminUserDtoToUserEntity(userDTO);
+    	
+    	// new user gets initially a generated password
         String encryptedPassword = passwordEncoder.encode(password);
-        newUser.setLogin(userDTO.getLogin().toLowerCase());
-        // new user gets initially a generated password
         newUser.setPassword(encryptedPassword);
-        newUser.setFirstName(userDTO.getFirstName());
-        newUser.setLastName(userDTO.getLastName());
+        newUser.setLogin(userDTO.getLogin().toLowerCase());
         if (userDTO.getEmail() != null) {
             newUser.setEmail(userDTO.getEmail().toLowerCase());
         }
-        newUser.setImageUrl(userDTO.getImageUrl());
-        newUser.setLangKey(userDTO.getLangKey());
-
-        if(setActivationKey){
+        if(setActivationKey) {
             // new user is not active
             newUser.setActivated(false);
             // new user gets registration key
             newUser.setActivationKey(RandomUtil.generateActivationKey());
-        }else{
+        } else {
             //USER AUTOMATICALLY IS ACTIVATED WHEN REGISTERS
             newUser.setActivated(true);
             newUser.setActivationKey(null);
         }
-
         Set<Authority> authorities = new HashSet<>();
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
+        
         userRepository.save(newUser);
         // this.clearUserCaches(newUser);
         log.debug("Created Information for User: {}", newUser);
         return newUser;
     }
-    public User update(AdminUserDTO userDTO,User user) {
-               
-        user.setLogin(userDTO.getLogin().toLowerCase());
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
+    
+    public User update(AdminUserDTO userDTO, User user) {
+        
+        // UserDTO to User conversion
+    	User newUser = userMapper.adminUserDtoToUserEntity(userDTO);
+    	
+        user.setLogin(newUser.getLogin().toLowerCase());
         if (user.getEmail() != null) {
-            user.setEmail(userDTO.getEmail().toLowerCase());
+            user.setEmail(newUser.getEmail().toLowerCase());
         }
-        user.setImageUrl(userDTO.getImageUrl());
-        user.setActivated(userDTO.isActivated());
-        user.setLangKey(userDTO.getLangKey());
+        user.setActivated(newUser.isActivated());
         Set<com.springboot.rest.infrastructure.entity.Authority> managedAuthorities = user.getAuthorities();
         managedAuthorities.clear();
         userDTO
@@ -153,6 +151,7 @@ public class UserJPAAdaptor implements UserPersistencPort {
             .filter(Optional::isPresent)
             .map(Optional::get)
             .forEach(managedAuthorities::add);
+        
         userRepository.save(user);
         this.clearUserCaches(user);
         log.debug("Changed Information for User: {}", user);
@@ -161,28 +160,48 @@ public class UserJPAAdaptor implements UserPersistencPort {
      
     }
     public User createUser(AdminUserDTO userDTO) {
-        User user = new User();
-        user.setLogin(userDTO.getLogin().toLowerCase());
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-        if (userDTO.getEmail() != null) {
-            user.setEmail(userDTO.getEmail().toLowerCase());
-        }
-        user.setImageUrl(userDTO.getImageUrl());
-        if (userDTO.getLangKey() == null) {
-            user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language
-        } else {
-            user.setLangKey(userDTO.getLangKey());
-        }
-        String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
-        user.setPassword(encryptedPassword);
-        user.setResetKey(RandomUtil.generateResetKey());
-        user.setResetDate(Instant.now());
-        user.setActivated(true);
-        if (userDTO.getAuthorities() != null) {
-            Set<Authority> authorities = userDTO.getAuthorities().stream().map(authorityRepository::findById).filter(Optional::isPresent).map(Optional::get).collect(Collectors.toSet());
-            user.setAuthorities(authorities);
-        }
+    	
+        // UserDTO to User conversion
+        User user = userMapper.adminUserDtoToUserEntity(userDTO);
+		if (userDTO.getEmail() != null) {
+			user.setEmail(userDTO.getEmail().toLowerCase());
+		}
+		if (userDTO.getLangKey() == null) {
+			user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language } else {
+			user.setLangKey(userDTO.getLangKey());
+		}
+		String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
+		user.setPassword(encryptedPassword);
+		user.setResetKey(RandomUtil.generateResetKey());
+		user.setResetDate(Instant.now());
+		user.setActivated(true);
+		if (userDTO.getAuthorities() != null) {
+			Set<Authority> authorities = userDTO.getAuthorities().stream().map(authorityRepository::findById)
+					.filter(Optional::isPresent).map(Optional::get).collect(Collectors.toSet());
+			user.setAuthorities(authorities);
+		}
+		
+		
+		// Hard-coded mapping
+		/*
+		 * // User user = new User(); user.setLogin(userDTO.getLogin().toLowerCase());
+		 * user.setFirstName(userDTO.getFirstName());
+		 * user.setLastName(userDTO.getLastName()); if (userDTO.getEmail() != null) {
+		 * user.setEmail(userDTO.getEmail().toLowerCase()); }
+		 * user.setImageUrl(userDTO.getImageUrl()); if (userDTO.getLangKey() == null) {
+		 * user.setLangKey(Constants.DEFAULT_LANGUAGE); // default language } else {
+		 * user.setLangKey(userDTO.getLangKey()); } String encryptedPassword =
+		 * passwordEncoder.encode(RandomUtil.generatePassword());
+		 * user.setPassword(encryptedPassword);
+		 * user.setResetKey(RandomUtil.generateResetKey());
+		 * user.setResetDate(Instant.now()); user.setActivated(true); if
+		 * (userDTO.getAuthorities() != null) { Set<Authority> authorities =
+		 * userDTO.getAuthorities().stream().map(authorityRepository::findById)
+		 * .filter(Optional::isPresent).map(Optional::get).collect(Collectors.toSet());
+		 * user.setAuthorities(authorities); }
+		 */
+		 
+        
         userRepository.save(user);
         this.clearUserCaches(user);
         log.debug("Created Information for User: {}", user);
