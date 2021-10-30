@@ -73,8 +73,7 @@ class AccountResourceIT {
     @Autowired
     private PasswordEncoder passwordEncoder;
     
-    @Autowired
-    private final UserMapper userMapper=new UserMapper();
+    private final UserMapper userMapper = new UserMapper();
     
     @Autowired
     private CacheManager cacheManager;
@@ -88,7 +87,7 @@ class AccountResourceIT {
     @BeforeEach
     public void init()
     {
-    	authorityPersistencePort= new AuthorityJPAAdaptor(authorityRepository);
+      authorityPersistencePort= new AuthorityJPAAdaptor(authorityRepository);
         userService = new UserService(userPersistencPort,userMapper,passwordEncoder,cacheManager);
         authorityService= new AuthorityService(authorityPersistencePort);
     }

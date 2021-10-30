@@ -12,6 +12,7 @@ import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.springboot.rest.domain.dto.SampleEntityDTO;
@@ -28,11 +29,11 @@ import com.springboot.rest.infrastructure.entity.SampleEntity;
  *
  */
 
-@Service
+@Component
 public class SampleEntityMapper {
 	
 	// inject ModelMapper
-	private ModelMapper modelMapper;
+	private ModelMapper modelMapper = new ModelMapper();
 	
 	////// DTO Mapping strategy //////////
 

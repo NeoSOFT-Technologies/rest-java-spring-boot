@@ -12,6 +12,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.springboot.rest.domain.dto.AdminUserDTO;
@@ -31,11 +32,11 @@ import com.springboot.rest.infrastructure.entity.User;
  *
  */
 
-@Service
+@Component
 public class UserMapper {
 
 	// inject ModelMapper
-	private ModelMapper modelMapper;
+	private ModelMapper modelMapper = new ModelMapper();
 	
 	////// DTO Mapping strategy for UserMapper //////////
 
@@ -69,7 +70,14 @@ public class UserMapper {
     
     // AdminUserDTO to User Mapping
 	public User adminUserDtoToUserEntity(AdminUserDTO adminUserDto) {
-		return modelMapper.map(adminUserDto, User.class);
+		if (adminUserDto == null) {
+			return null;
+		} else {
+			User user = modelMapper.map(adminUserDto, User.class);
+			Set<Authority> authorities = this.authoritiesFromStrings(adminUserDto.getAuthorities());
+			user.setAuthorities(authorities);
+			return user;
+		}
 	}
 	
     public List<User> adminUserDtosToUserEntities(List<AdminUserDTO> adminUserDtos) {
@@ -78,34 +86,47 @@ public class UserMapper {
 	
     //////////////////////////2. Hard-coded way /////////////////////
     
-	/*
-	 * public List<UserDTO> usersToUserDTOs(List<User> users) { return
-	 * users.stream().filter(Objects::nonNull).map(this::userToUserDTO).collect(
-	 * Collectors.toList()); }
-	 * 
-	 * public UserDTO userToUserDTO(User user) { return new UserDTO(user); }
-	 * 
-	 * public List<AdminUserDTO> usersToAdminUserDTOs(List<User> users) { return
-	 * users.stream().filter(Objects::nonNull).map(this::userToAdminUserDTO).collect
-	 * (Collectors.toList()); }
-	 * 
-	 * public AdminUserDTO userToAdminUserDTO(User user) { return new
-	 * AdminUserDTO(user); }
-	 * 
-	 * public List<User> userDTOsToUsers(List<AdminUserDTO> userDTOs) { return
-	 * userDTOs.stream().filter(Objects::nonNull).map(this::userDTOToUser).collect(
-	 * Collectors.toList()); }
-	 * 
-	 * public User userDTOToUser(AdminUserDTO userDTO) { if (userDTO == null) {
-	 * return null; } else { User user = new User(); user.setId(userDTO.getId());
-	 * user.setLogin(userDTO.getLogin()); user.setFirstName(userDTO.getFirstName());
-	 * user.setLastName(userDTO.getLastName()); user.setEmail(userDTO.getEmail());
-	 * user.setImageUrl(userDTO.getImageUrl());
-	 * user.setActivated(userDTO.isActivated());
-	 * user.setLangKey(userDTO.getLangKey()); Set<Authority> authorities =
-	 * this.authoritiesFromStrings(userDTO.getAuthorities());
-	 * user.setAuthorities(authorities); return user; } }
-	 */
+	
+	public List<UserDTO> usersToUserDTOs(List<User> users) {
+		return users.stream().filter(Objects::nonNull).map(this::userToUserDTO).collect(Collectors.toList());
+	}
+
+	public UserDTO userToUserDTO(User user) {
+		return new UserDTO(user);
+	}
+
+	public List<AdminUserDTO> usersToAdminUserDTOs(List<User> users) {
+		return users.stream().filter(Objects::nonNull).map(this::userToAdminUserDTO).collect(Collectors.toList());
+	}
+
+	public AdminUserDTO userToAdminUserDTO(User user) {
+		return new AdminUserDTO(user);
+	}
+
+	public List<User> userDTOsToUsers(List<AdminUserDTO> userDTOs) {
+		return userDTOs.stream().filter(Objects::nonNull).map(this::userDTOToUser).collect(Collectors.toList());
+	}
+
+	public User userDTOToUser(AdminUserDTO userDTO) {
+		if (userDTO == null) {
+			return null;
+		} else {
+			User user = new User();
+			user.setId(userDTO.getId());
+			user.setLogin(userDTO.getLogin());
+			user.setFirstName(userDTO.getFirstName());
+			user.setLastName(userDTO.getLastName());
+			user.setEmail(userDTO.getEmail());
+			user.setImageUrl(userDTO.getImageUrl());
+			user.setActivated(userDTO.isActivated());
+			user.setLangKey(userDTO.getLangKey());
+			Set<Authority> authorities = this.authoritiesFromStrings(userDTO.getAuthorities());
+			user.setAuthorities(authorities);
+			return user;
+		}
+	}
+	 
+	 
 
     private Set<Authority> authoritiesFromStrings(Set<String> authoritiesAsString) {
         Set<Authority> authorities = new HashSet<>();
