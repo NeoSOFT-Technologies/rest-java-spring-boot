@@ -12,7 +12,6 @@
 # Full reference is available at:
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
-server.port: 8090
 
 logging:
   level:
@@ -35,7 +34,7 @@ spring:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:mysql://localhost:3306/basicSample?allowPublicKeyRetrieval=true&useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true
     username: root
-    password: Ravikiran@123
+    password: admin
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -61,7 +60,7 @@ spring:
     cache: false
 
 server:
-  port: 8090
+  port: 8080
 
 # ===================================================================
 # JHipster specific properties
