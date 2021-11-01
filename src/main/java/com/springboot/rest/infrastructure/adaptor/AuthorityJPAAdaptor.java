@@ -17,7 +17,6 @@ public class AuthorityJPAAdaptor implements AuthorityPersistencePort{
 
     public AuthorityJPAAdaptor(AuthorityRepository authRepository) {
         this.authRepository = authRepository;
-
     }
     
     public List<Authority> findAll() {
@@ -28,6 +27,5 @@ public class AuthorityJPAAdaptor implements AuthorityPersistencePort{
         return     authRepository.findById(id);
 
     }
-    
 
 }

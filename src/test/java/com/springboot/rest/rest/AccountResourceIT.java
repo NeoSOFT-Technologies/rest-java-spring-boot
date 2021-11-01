@@ -12,6 +12,7 @@ import com.springboot.rest.infrastructure.adaptor.AuthorityJPAAdaptor;
 import com.springboot.rest.infrastructure.entity.User;
 import com.springboot.rest.infrastructure.repository.AuthorityRepository;
 import com.springboot.rest.infrastructure.repository.UserRepository;
+import com.springboot.rest.mapper.UserMapper;
 import com.springboot.rest.security.AuthoritiesConstants;
 import com.springboot.rest.rest.vm.KeyAndPasswordVM;
 import com.springboot.rest.rest.vm.ManagedUserVM;
@@ -74,7 +75,8 @@ class AccountResourceIT {
     @Autowired
     private PasswordEncoder passwordEncoder;
     
-
+    private final UserMapper userMapper = new UserMapper();
+    
     @Autowired
     private CacheManager cacheManager;
 
@@ -88,7 +90,7 @@ class AccountResourceIT {
     public void init()
     {
       authorityPersistencePort= new AuthorityJPAAdaptor(authorityRepository);
-        userService = new UserService(userPersistencPort,passwordEncoder,cacheManager);
+        userService = new UserService(userPersistencPort,userMapper,passwordEncoder,cacheManager);
         authorityService= new AuthorityService(authorityPersistencePort);
     }
     @Test

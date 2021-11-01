@@ -79,12 +79,10 @@ public class UserResource {
     private String applicationName;
 
     private final UserServicePort userServicePort;
-
-
-
+   
     public UserResource(UserServicePort userServicePort) {
         this.userServicePort = userServicePort;
-      
+       
     }
 
     /**

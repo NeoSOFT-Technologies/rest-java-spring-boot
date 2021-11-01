@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 /**
  * REST controller for managing {@link SampleEntity}.
  */
+// @Component
 @RestController
 @RequestMapping("/api")
 public class SampleEntityResource {
@@ -35,10 +36,20 @@ public class SampleEntityResource {
     private String applicationName;
 
     private final SampleEntityServicePort sampleEntityServicePort;
-
+    
     public SampleEntityResource(SampleEntityServicePort sampleEntityServicePort) {
         this.sampleEntityServicePort = sampleEntityServicePort;
     }
+    
+    /*
+    // testing with mapper: initialize Mapper Class
+	private final SampleEntityMapper sampleEntityMapper;
+
+    public SampleEntityResource(SampleEntityServicePort sampleEntityServicePort, SampleEntityMapper sampleEntityMapper) {
+        this.sampleEntityServicePort = sampleEntityServicePort;
+        this.sampleEntityMapper = sampleEntityMapper;
+    }
+    */
 
     /**
      * {@code POST  /sample-entity} : Create a new a.

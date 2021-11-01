@@ -4,6 +4,8 @@ import com.springboot.rest.domain.dto.SampleEntityDTO;
 import com.springboot.rest.domain.port.spi.SampleEntityPersistencePort;
 import com.springboot.rest.infrastructure.entity.SampleEntity;
 import com.springboot.rest.infrastructure.repository.SampleEntityRepository;
+import com.springboot.rest.mapper.SampleEntityMapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,8 +20,11 @@ public class SampleEntityJPAAdaptor implements SampleEntityPersistencePort {
     @Autowired
     private final SampleEntityRepository sampleEntityRepository;
 
-    public SampleEntityJPAAdaptor(SampleEntityRepository sampleEntityRepository) {
+    private final SampleEntityMapper sampleEntityMapper;
+    
+    public SampleEntityJPAAdaptor(SampleEntityRepository sampleEntityRepository, SampleEntityMapper sampleEntityMapper) {
         this.sampleEntityRepository = sampleEntityRepository;
+        this.sampleEntityMapper = sampleEntityMapper;
     }
 
     public List<SampleEntity> findAll() {
@@ -33,14 +38,9 @@ public class SampleEntityJPAAdaptor implements SampleEntityPersistencePort {
 
     public SampleEntity save(SampleEntityDTO sampleEntityDTO) {
 
-        SampleEntity dtoToSampleEntity =new SampleEntity();
-        dtoToSampleEntity.setId(sampleEntityDTO.getId());
-        dtoToSampleEntity.setName(sampleEntityDTO.getName());
-        dtoToSampleEntity.setPassword(sampleEntityDTO.getPassword());
-        dtoToSampleEntity.setAge(sampleEntityDTO.getAge());
-        dtoToSampleEntity.setPhone(sampleEntityDTO.getPhone());
-
-        return sampleEntityRepository.save(dtoToSampleEntity);
+        // SampleEntityDTO to SampleEntity conversion
+    	SampleEntity sampleEntity = sampleEntityMapper.dtoToEntity(sampleEntityDTO);
+        return sampleEntityRepository.save(sampleEntity);
     }
 
     @Override
