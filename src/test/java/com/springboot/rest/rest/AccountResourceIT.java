@@ -35,6 +35,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Optional;
 
+import javax.validation.constraints.AssertTrue;
+
 import static com.springboot.rest.rest.AccountResourceIT.TEST_USER_LOGIN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -837,4 +839,6 @@ class AccountResourceIT {
     }
     
     
+
 }
+

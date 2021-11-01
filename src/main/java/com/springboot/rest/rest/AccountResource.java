@@ -37,7 +37,6 @@ public class AccountResource {
 
     private final UserServicePort userServicePort;
 
-
     private final MailServicePort mailServicePort;
     
     private final UserMapper userMapper;
@@ -67,6 +66,7 @@ public class AccountResource {
         if (isPasswordLengthInvalid(managedUserVM.getPassword())) {
             throw new InvalidPasswordException();
         }
+
         User user = userServicePort.registerUser(managedUserVM, managedUserVM.getPassword());
      
     }
@@ -165,7 +165,7 @@ public class AccountResource {
     public void requestPasswordReset(@RequestBody String mail) {
         Optional<User> user = userServicePort.requestPasswordReset(mail);
         if (user.isPresent()) {
-        	  log.warn("Password reset requested for existing mail");
+        	log.warn("Password reset requested for existing mail");
         } else {
             log.warn("Password reset requested for non existing mail");
         }

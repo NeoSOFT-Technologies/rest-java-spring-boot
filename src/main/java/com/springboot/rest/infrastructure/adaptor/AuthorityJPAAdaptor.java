@@ -13,8 +13,6 @@ import com.springboot.rest.infrastructure.repository.AuthorityRepository;
 @Service
 public class AuthorityJPAAdaptor implements AuthorityPersistencePort{
 
-
-
     private final AuthorityRepository authRepository;
 
     public AuthorityJPAAdaptor(AuthorityRepository authRepository) {

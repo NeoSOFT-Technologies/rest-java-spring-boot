@@ -35,6 +35,7 @@ public class LiquibaseConfiguration {
         LiquibaseProperties liquibaseProperties,
         ObjectProvider<DataSource> dataSource,
         DataSourceProperties dataSourceProperties
+
     ) {
        
         SpringLiquibase liquibase = SpringLiquibaseUtil.createAsyncSpringLiquibase(

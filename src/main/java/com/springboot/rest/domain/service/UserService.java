@@ -109,7 +109,6 @@ public class UserService implements UserServicePort {
 
         return userPersistencePort.save(userDTO, password);
 
-       
     }
 
     @Override
@@ -136,7 +135,7 @@ public class UserService implements UserServicePort {
             return userPersistencePort.createUser(userDTO);
 
         }
-       
+
     }
 
     /**

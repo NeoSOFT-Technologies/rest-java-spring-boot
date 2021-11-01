@@ -1,13 +1,14 @@
 package com.springboot.rest.security;
 
 import java.util.List;
+
 import java.util.Locale;
 import java.util.stream.Collectors;
 
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.*;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.springboot.rest.domain.port.spi.UserPersistencPort;
 import com.springboot.rest.infrastructure.entity.User;
-
 /**
  * Authenticate a user from the database.
  */
@@ -38,11 +38,12 @@ public class DomainUserDetailsService implements UserDetailsService {
         log.debug("Authenticating {}", login);
 
         if (new EmailValidator().isValid(login, null)) {
-            
+          
             return userPersistencPort
 
             .findOneWithAuthoritiesByEmailIgnoreCase(login).map(user -> createSpringSecurityUser(login, user)).
             orElseThrow(() -> new UsernameNotFoundException("User with email " + login + " was not found in the database"));
+
         }
 
         String lowercaseLogin = login.toLowerCase(Locale.ENGLISH);
