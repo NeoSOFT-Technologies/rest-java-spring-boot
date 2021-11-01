@@ -3,7 +3,7 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
+    
     }
 }
 
@@ -35,6 +35,7 @@ apply from: "gradle/docker.gradle"
 apply from: "gradle/sonar.gradle"
 //jhipster-needle-gradle-apply-from - JHipster will add additional gradle scripts to be applied here
 apply plugin: "eclipse"
+
 if (project.hasProperty("prod") || project.hasProperty("gae")) {
     apply from: "gradle/profile_prod.gradle"
 } else {
@@ -136,7 +137,8 @@ liquibase {
             driver "com.mysql.cj.jdbc.Driver"
             url "jdbc:mysql://localhost:3306/basicSample"
             username "root"
-            password "Ravikiran@123"
+            password "admin"
+
             changeLogFile "src/main/resources/config/liquibase/master.xml"
             defaultSchemaName "basicSample"
             logLevel "debug"
@@ -146,7 +148,8 @@ liquibase {
             driver "com.mysql.cj.jdbc.Driver"
             url "jdbc:mysql://localhost:3306/basicSample"
             username "root"
-            password "Ravikiran@123"
+            password "admin"
+
             changeLogFile project.ext.diffChangelogFile
             referenceUrl "hibernate:spring:com.springboot.rest.domain?dialect=org.hibernate.dialect.MySQL8Dialect&hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy"
             defaultSchemaName "basicSample"
@@ -265,7 +268,14 @@ dependencies {
     testImplementation "com.h2database:h2"
     developmentOnly "org.springframework.boot:spring-boot-devtools:${springBootVersion}"
     //jhipster-needle-gradle-dependency - JHipster will add additional dependencies here
+    // https://mvnrepository.com/artifact/org.modelmapper/modelmapper
+	implementation "org.modelmapper:modelmapper:2.4.4"
 
+  compileOnly 'org.projectlombok:lombok:1.18.22'
+	 annotationProcessor 'org.projectlombok:lombok:1.18.22'
+	
+	 testCompileOnly 'org.projectlombok:lombok:1.18.22'
+	 testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
 }
 
 if (project.hasProperty("gae")) {

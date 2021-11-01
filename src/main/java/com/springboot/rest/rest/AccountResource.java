@@ -2,9 +2,11 @@ package com.springboot.rest.rest;
 
 import com.springboot.rest.domain.dto.AdminUserDTO;
 import com.springboot.rest.domain.dto.PasswordChangeDTO;
+import com.springboot.rest.domain.dto.SampleEntityDTO;
 import com.springboot.rest.domain.port.api.MailServicePort;
 import com.springboot.rest.domain.port.api.UserServicePort;
 import com.springboot.rest.infrastructure.entity.User;
+import com.springboot.rest.mapper.UserMapper;
 import com.springboot.rest.rest.errors.AccountResourceException;
 import com.springboot.rest.rest.errors.EmailAlreadyUsedException;
 import com.springboot.rest.rest.errors.LoginAlreadyUsedException;
@@ -35,11 +37,16 @@ public class AccountResource {
 
     private final UserServicePort userServicePort;
 
-   
 
-    public AccountResource(UserServicePort userServicePort) {
+    private final MailServicePort mailServicePort;
+    
+    private final UserMapper userMapper;
+
+    public AccountResource(UserServicePort userServicePort, MailServicePort mailServicePort, UserMapper userMapper) {
         this.userServicePort = userServicePort;
-       
+        this.mailServicePort = mailServicePort;
+        this.userMapper = userMapper;
+
     }
 
     /**
@@ -124,10 +131,8 @@ public class AccountResource {
     @PostMapping("/account")
     @Operation(summary = "/account", security = @SecurityRequirement(name = "bearerAuth"))
     public void saveAccount(@Valid @RequestBody AdminUserDTO userDTO) {
-        String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"));
-
+        String userLogin = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new AccountResourceException("Current user login not found"));       
         userServicePort.saveAccount(userDTO, userLogin);
-
     }
 
     /**
