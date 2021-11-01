@@ -127,7 +127,6 @@ public class UserJPAAdaptor implements UserPersistencPort {
         newUser.setAuthorities(authorities);
         
         userRepository.save(newUser);
-        // this.clearUserCaches(newUser);
         log.debug("Created Information for User: {}", newUser);
         return newUser;
     }

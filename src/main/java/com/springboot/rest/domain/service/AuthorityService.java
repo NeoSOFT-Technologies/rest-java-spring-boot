@@ -18,8 +18,6 @@ import java.util.stream.Collectors;
 @Transactional
 public class AuthorityService implements AuthorityServicePort {
 
-    private final Logger log = LoggerFactory.getLogger(AuthorityService.class);
-
     private final AuthorityPersistencePort authorityPersistencePort;
 
     public AuthorityService(AuthorityPersistencePort authorityPersistencePort) {

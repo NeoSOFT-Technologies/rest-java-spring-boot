@@ -13,7 +13,7 @@ import com.springboot.rest.infrastructure.repository.AuthorityRepository;
 @Service
 public class AuthorityJPAAdaptor implements AuthorityPersistencePort{
 
-    private final Logger log = LoggerFactory.getLogger(AuthorityJPAAdaptor.class);
+
 
     private final AuthorityRepository authRepository;
 

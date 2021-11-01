@@ -80,11 +80,11 @@ public class UserResource {
 
     private final UserServicePort userServicePort;
 
-    private final MailServicePort mailServicePort;
+   
 
-    public UserResource(UserServicePort userServicePort, MailServicePort mailServicePort) {
+    public UserResource(UserServicePort userServicePort) {
         this.userServicePort = userServicePort;
-        this.mailServicePort = mailServicePort;
+       
     }
 
     /**
