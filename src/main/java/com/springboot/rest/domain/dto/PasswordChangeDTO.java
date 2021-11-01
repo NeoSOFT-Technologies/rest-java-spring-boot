@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PasswordChangeDTO {
 
+	private Long id;
     private String currentPassword;
     private String newPassword;
 
@@ -19,8 +20,23 @@ public class PasswordChangeDTO {
         this.currentPassword = currentPassword;
         this.newPassword = newPassword;
     }
+    
+    public PasswordChangeDTO(Long id, String currentPassword, String newPassword) {
+    	this.id = id;
+        this.currentPassword = currentPassword;
+        this.newPassword = newPassword;
+    }
 
-    public String getCurrentPassword() {
+    
+    public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getCurrentPassword() {
         return currentPassword;
     }
 

@@ -6,6 +6,7 @@ import com.springboot.rest.domain.port.api.UserServicePort;
 import com.springboot.rest.domain.port.spi.UserPersistencPort;
 import com.springboot.rest.infrastructure.entity.User;
 import com.springboot.rest.infrastructure.repository.UserRepository;
+import com.springboot.rest.mapper.UserMapper;
 import com.springboot.rest.security.SecurityUtils;
 import com.springboot.rest.rest.errors.AccountResourceException;
 import com.springboot.rest.rest.errors.BadRequestAlertException;
@@ -35,13 +36,23 @@ public class UserService implements UserServicePort {
     private final Logger log = LoggerFactory.getLogger(UserService.class);
 
     private final UserPersistencPort userPersistencePort;
+    
+    private final UserMapper userMapper;
 
     private final PasswordEncoder passwordEncoder;
 
     private final CacheManager cacheManager;
 
-    public UserService(UserPersistencPort userRepository, PasswordEncoder passwordEncoder, CacheManager cacheManager) {
+	/*
+	 * public UserService(UserPersistencPort userRepository, PasswordEncoder
+	 * passwordEncoder, CacheManager cacheManager) { this.userPersistencePort =
+	 * userRepository; this.passwordEncoder = passwordEncoder; this.cacheManager =
+	 * cacheManager; }
+	 */
+    
+    public UserService(UserPersistencPort userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, CacheManager cacheManager) {
         this.userPersistencePort = userRepository;
+        this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
         this.cacheManager = cacheManager;
     }
@@ -112,8 +123,8 @@ public class UserService implements UserServicePort {
     }
 
     @Override
-    public User createUser(AdminUserDTO userDTO) {
-
+    public User createUser(AdminUserDTO userDTO) {        
+    	
         if (userDTO.getId() != null) {
             throw new BadRequestAlertException("A new user cannot already have an ID", "userManagement", "idexists");
             // Lowercase the user login before comparing with database
@@ -131,25 +142,32 @@ public class UserService implements UserServicePort {
     /**
      * Update all information for a specific user, and return the modified user.
      *
-     * @param userDTO
+     * @param userEntity
      *            user to update.
      * @return updated user.
      */
     @Override
     public Optional<AdminUserDTO> updateUser(AdminUserDTO userDTO) {
 
-        Optional<User> existingUser = userPersistencePort.findOneByEmailIgnoreCase(userDTO.getEmail());
-        if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
+        // UserDTO to User conversion
+        User userEntity = userMapper.adminUserDtoToUserEntity(userDTO);
+    	
+        Optional<User> existingUser = userPersistencePort.findOneByEmailIgnoreCase(userEntity.getEmail());
+        if (existingUser.isPresent() && (!existingUser.get().getId().equals(userEntity.getId()))) {
             throw new EmailAlreadyUsedException();
         }
-        existingUser = userPersistencePort.findOneByLogin(userDTO.getLogin().toLowerCase());
-        if (existingUser.isPresent() && (!existingUser.get().getId().equals(userDTO.getId()))) {
+        existingUser = userPersistencePort.findOneByLogin(userEntity.getLogin().toLowerCase());
+        if (existingUser.isPresent() && (!existingUser.get().getId().equals(userEntity.getId()))) {
             throw new LoginAlreadyUsedException();
         }
 
-        return Optional.of(userPersistencePort.findById(userDTO.getId())).filter(Optional::isPresent).map(Optional::get).map(user -> {
+        return Optional.of(userPersistencePort.findById(userEntity.getId())).filter(Optional::isPresent).map(Optional::get).map(user -> {
             this.clearUserCaches(user);
-            userPersistencePort.update(userDTO, user);
+            
+            // UserDTO to User conversion
+            AdminUserDTO userEntityDTO = userMapper.userEntityToAdminUserDto(userEntity);
+            
+            userPersistencePort.update(userEntityDTO, user);
             this.clearUserCaches(user);
             log.debug("Changed Information for User: {}", user);
             return user;
@@ -168,7 +186,10 @@ public class UserService implements UserServicePort {
     @Override
     public void saveAccount(AdminUserDTO userDTO, String userLogin) {
 
-        Optional<User> existingUser = userPersistencePort.findOneByEmailIgnoreCase(userDTO.getEmail());
+        // UserDTO to User conversion
+        User userEntity = userMapper.adminUserDtoToUserEntity(userDTO);
+    	
+        Optional<User> existingUser = userPersistencePort.findOneByEmailIgnoreCase(userEntity.getEmail());
         if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userLogin))) {
             throw new EmailAlreadyUsedException();
         }
@@ -176,8 +197,8 @@ public class UserService implements UserServicePort {
         if (!user.isPresent()) {
             throw new AccountResourceException("User could not be found");
         }
-        updateUser(userDTO.getFirstName(), userDTO.getLastName(), userDTO.getEmail(), userDTO.getLangKey(), userDTO.getImageUrl());
-
+        
+        updateUser(userEntity.getFirstName(), userEntity.getLastName(), userEntity.getEmail(), userEntity.getLangKey(), userEntity.getImageUrl());
     }
 
     /**

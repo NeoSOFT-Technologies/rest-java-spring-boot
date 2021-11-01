@@ -38,7 +38,6 @@ public class SampleEntity implements Serializable {
     private Integer phone;
 
 
-
     public SampleEntity name(String name) {
         this.name = name;
         return this;
@@ -63,10 +62,10 @@ public class SampleEntity implements Serializable {
     }
 
 
-
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
-    @Override
+
+	@Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;

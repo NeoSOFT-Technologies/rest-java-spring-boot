@@ -1,5 +1,6 @@
 package com.springboot.rest.domain.dto;
 
+
 import com.springboot.rest.infrastructure.entity.SampleEntity;
 
 import lombok.AllArgsConstructor;
@@ -21,6 +22,7 @@ public class SampleEntityDTO {
     private Integer age;
 
     private Integer phone;
+    
 
  
 
