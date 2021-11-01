@@ -3,6 +3,9 @@ package com.springboot.rest.infrastructure.entity;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import lombok.Data;
+
+
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -10,7 +13,9 @@ import java.io.Serializable;
  * A A.
  */
 @Entity
+@Data
 @Table(name = "a")
+
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class SampleEntity implements Serializable {
 
@@ -31,72 +36,32 @@ public class SampleEntity implements Serializable {
 
     @Column(name = "phone")
     private Integer phone;
-    
-    // jhipster-needle-entity-add-field - JHipster will add fields here
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public SampleEntity id(Long id) {
-        this.id = id;
-        return this;
-    }
-
-    public String getName() {
-        return this.name;
-    }
 
     public SampleEntity name(String name) {
         this.name = name;
         return this;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPassword() {
-        return this.password;
-    }
 
     public SampleEntity password(String password) {
         this.password = password;
         return this;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Integer getAge() {
-        return this.age;
-    }
 
     public SampleEntity age(Integer age) {
         this.age = age;
         return this;
     }
 
-    public void setAge(Integer age) {
-        this.age = age;
-    }
-
-    public Integer getPhone() {
-        return this.phone;
-    }
 
     public SampleEntity phone(Integer phone) {
         this.phone = phone;
         return this;
     }
 
-    public void setPhone(Integer phone) {
-        this.phone = phone;
-    }
+
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
 
@@ -117,15 +82,4 @@ public class SampleEntity implements Serializable {
         return getClass().hashCode();
     }
 
-    // prettier-ignore
-    @Override
-    public String toString() {
-        return "A{" +
-            "id=" + getId() +
-            ", name='" + getName() + "'" +
-            ", password='" + getPassword() + "'" +
-            ", age=" + getAge() +
-            ", phone=" + getPhone() +
-            "}";
-    }
 }

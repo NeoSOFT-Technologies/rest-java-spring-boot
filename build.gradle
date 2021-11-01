@@ -3,7 +3,7 @@ buildscript {
         gradlePluginPortal()
     }
     dependencies {
-        //jhipster-needle-gradle-buildscript-dependency - JHipster will add additional gradle build script plugins here
+    
     }
 }
 
@@ -269,6 +269,11 @@ dependencies {
     // https://mvnrepository.com/artifact/org.modelmapper/modelmapper
 	implementation "org.modelmapper:modelmapper:2.4.4"
 
+  compileOnly 'org.projectlombok:lombok:1.18.22'
+	 annotationProcessor 'org.projectlombok:lombok:1.18.22'
+	
+	 testCompileOnly 'org.projectlombok:lombok:1.18.22'
+	 testAnnotationProcessor 'org.projectlombok:lombok:1.18.22'
 }
 
 if (project.hasProperty("gae")) {

@@ -145,7 +145,7 @@ Take it for a test drive. We'd love to hear any feedback you have or if you've t
 * Swagger/Open API
 
 
-## Wiki
+##  Wiki
 - [Project Set Up Guide](https://github.com/NeoSOFT-Technologies/rest-java-spring-boot/wiki)
 - [Clean Architecture](https://github.com/NeoSOFT-Technologies/rest-java-spring-boot/wiki/Clean-Architecture)
 - [JSON Web Tokens](https://github.com/NeoSOFT-Technologies/rest-java-spring-boot/wiki/JSON-Web-Tokens)
