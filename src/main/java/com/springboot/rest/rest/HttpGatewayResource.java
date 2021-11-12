@@ -39,7 +39,7 @@ public class HttpGatewayResource {
     
 	@GetMapping("/message")
 	public String message() {
-		return "Message from XXXXXXXXXXX HttpGatewayResource......";
+		return "Message from HttpGatewayResource......";
 	}
 	
 	@PostMapping("/testHR")

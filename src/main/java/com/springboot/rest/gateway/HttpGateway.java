@@ -14,8 +14,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class HttpGateway {
 	
 	private static final String USER_AGENT = "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36";
@@ -31,6 +33,7 @@ public class HttpGateway {
 		
 		// Set up the connection: creating request :---
 		URL url = new URL(urlHeader + "?" + params);
+//		URL url = new URL(urlHeader);
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.setRequestMethod("GET");
 		
