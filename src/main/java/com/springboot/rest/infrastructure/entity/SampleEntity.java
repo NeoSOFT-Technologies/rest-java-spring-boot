@@ -3,6 +3,7 @@ package com.springboot.rest.infrastructure.entity;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 
