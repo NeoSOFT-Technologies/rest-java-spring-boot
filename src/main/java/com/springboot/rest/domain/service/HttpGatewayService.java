@@ -21,16 +21,13 @@ public class HttpGatewayService implements HttpGatewayServicePort {
     }
 
 	@Override
-	public String performGHR(Map<String, String> httpHeader) throws IOException {
-		
-		return httpGatewayPersistencePort.performGHR(httpHeader);
+	public String makeGetRequest(Map<String, String> httpHeader) throws IOException {
+		return httpGatewayPersistencePort.makeGetRequest(httpHeader);
 	}
 
 	@Override
-	public String performPHR(Map<String, String> httpHeader) throws IOException {
-		
-		return httpGatewayPersistencePort.performPHR(httpHeader);
+	public String makePostRequest(Map<String, String> httpHeader) throws IOException {
+		return httpGatewayPersistencePort.makePostRequest(httpHeader);
 	}
-
 
 }

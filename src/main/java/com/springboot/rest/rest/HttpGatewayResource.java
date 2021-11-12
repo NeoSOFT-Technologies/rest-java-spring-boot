@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.springboot.rest.domain.port.api.HttpGatewayServicePort;
 import com.springboot.rest.domain.port.api.SampleEntityServicePort;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 @RestController
 @RequestMapping("/httpreq")
 public class HttpGatewayResource {
@@ -25,6 +28,9 @@ public class HttpGatewayResource {
 	private final Logger log = LoggerFactory.getLogger(HttpGatewayResource.class);
 
 	private static final String accept = "Accept";
+	private static final String auth = "Auth";
+	private static final String url = "ExternalURL";
+	private static final String params = "Params";
 	
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
@@ -37,54 +43,51 @@ public class HttpGatewayResource {
 	
     // API calls' methods
     
+    // Test API call
 	@GetMapping("/message")
+	@Operation(summary = "/message", security = @SecurityRequirement(name = "bearerAuth"))
 	public String message() {
 		return "Message from HttpGatewayResource......";
 	}
 	
-	@PostMapping("/testHR")
-	public ResponseEntity<Map<String, String>> testHttpReq(
+	// GET Request API call to external URL
+	@PostMapping("/get-request")
+	@Operation(summary = "/get-request", security = @SecurityRequirement(name = "bearerAuth"))
+	public ResponseEntity<String> createGETRequest(
 			@RequestHeader(value=accept) String acceptHeader,
-			@RequestHeader(value="Auth") String authHeader
-			) {
-		Map<String, String> returnValue = new HashMap<>();
-		returnValue.put(accept, acceptHeader);
-		returnValue.put("Auth", authHeader);
-		
-		return ResponseEntity.status(HttpStatus.OK).body(returnValue);
-	}
-	
-	@PostMapping("/getHR")
-	public ResponseEntity<String> createGETHttpReq(
-			@RequestHeader(value=accept) String acceptHeader,
-			@RequestHeader(value="Auth") String authHeader,
-			@RequestHeader(value="ExternalURL") String urlHeader
+			@RequestHeader(value=auth) String authHeader,
+			@RequestHeader(value=url) String urlHeader,
+			@RequestHeader(value=params) String paramsHeader
 			) throws IOException {
-		
 		Map<String, String> returnValue = new HashMap<>();
 		returnValue.put(accept, acceptHeader);
-		returnValue.put("Auth", authHeader);
-		returnValue.put("ExternalURL", urlHeader);
+		returnValue.put(auth, authHeader);
+		returnValue.put(url, urlHeader);
+		returnValue.put(params, paramsHeader);
 		
-		String httpHeader = httpGatewayServicePort.performGHR(returnValue);
-	
+		String httpHeader = httpGatewayServicePort.makeGetRequest(returnValue);
+		
 		return ResponseEntity.status(HttpStatus.OK).body(httpHeader);
 	}
 	
-	@PostMapping("/postHR")
-	public ResponseEntity<String> createPOSTHttpReq(
+	// POST Request API call to external URL
+	@PostMapping("/post-request")
+	@Operation(summary = "/post-request", security = @SecurityRequirement(name = "bearerAuth"))
+	public ResponseEntity<String> createPOSTRequest(
 			@RequestHeader(value=accept) String acceptHeader,
-			@RequestHeader(value="Auth") String authHeader,
-			@RequestHeader(value="ExternalURL") String urlHeader
+			@RequestHeader(value=auth) String authHeader,
+			@RequestHeader(value=url) String urlHeader,
+			@RequestHeader(value=params) String paramsHeader
 			) throws IOException {
-		
 		Map<String, String> returnValue = new HashMap<>();
 		returnValue.put(accept, acceptHeader);
-		returnValue.put("Auth", authHeader);
-		returnValue.put("ExternalURL", urlHeader);
+		returnValue.put(auth, authHeader);
+		returnValue.put(url, urlHeader);
+		returnValue.put(params, paramsHeader);
 		
-		String httpHeader = httpGatewayServicePort.performPHR(returnValue);
-	
+		String httpHeader = httpGatewayServicePort.makePostRequest(returnValue);
+		
 		return ResponseEntity.status(HttpStatus.OK).body(httpHeader);
 	}
+	
 }

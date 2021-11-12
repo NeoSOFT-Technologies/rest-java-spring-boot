@@ -46,36 +46,29 @@ class HttpGatewayGetRequestTest {
     private String testAccept = "";
     private String testAuth = "";
     private String testUrl = "";
+    private String testParams = "";
     Map<String, String> testHttpHeader = new HashMap<>();
     
     @Autowired
     @MockBean
     private HttpGatewayServicePort httpGatewayServicePort;
-    
     @MockBean
     private HttpGatewayPersistencePort httpGatewayPersistencePort;
-    
     @InjectMocks
     private HttpGateway httpGateway;
 
 	@BeforeEach
     public void init() {
-//		sampleEntity = new SampleEntity();
-//		sampleEntity.setId(99l);
-//		sampleEntity.setAge(20);
-//		sampleEntity.setName("Test Sample");
-//		sampleEntity.setPhone(2848);
-//		sampleEntity.setPassword("Test@123");
-//
-//        sampleEntityDto = new SampleEntityDTO(sampleEntity);
 		
 		testAccept = "application/json";
 		testAuth = "Bearer jshdakjfkjegdiufedbkckjds64bh87432bkjcbds";
 		testUrl = "http://httpbin.org/get";
+		testParams = "hero=IronMan&power=BeingRich";
+		
 		testHttpHeader.put("Accept", testAccept);
 		testHttpHeader.put("Auth", testAuth);
 		testHttpHeader.put("ExternalURL", testUrl);
-		
+		testHttpHeader.put("Params", testParams);
 		
         httpGateway = new HttpGateway();
     }
@@ -85,49 +78,26 @@ class HttpGatewayGetRequestTest {
 		assertThat(httpGatewayServicePort).isNotNull();
 	}
 	
+	// Test case for GET Http Request
 	@Test
 	void performGHRTest() throws IOException {
 		Mockito.when(httpGatewayPersistencePort
-				.performGHR(testHttpHeader))
+				.makeGetRequest(testHttpHeader))
 				.thenReturn(null);
-		String fetchedGetResponse = httpGateway.performGETHttpReq(testAccept, testAuth, testUrl);
+		String fetchedGetResponse = httpGateway.performGETRequest(testHttpHeader);
 		
 		assertNotNull(fetchedGetResponse);
 	}
 	
+	// Test case for POST Http Request
 	@Test
 	void performPHRTest() throws IOException {
 		Mockito.when(httpGatewayPersistencePort
-				.performPHR(testHttpHeader))
+				.makePostRequest(testHttpHeader))
 				.thenReturn(null);
-		String fetchedPostResponse = httpGateway.performPOSTHttpReq(testAccept, testAuth, testUrl);
+		String fetchedPostResponse = httpGateway.performPOSTRequest(testHttpHeader);
 		
 		assertNotNull(fetchedPostResponse);
 	}
-	
-//    @Test
-//    void findSampleEntitiesTest() {
-//		List<SampleEntity> entities = new ArrayList<SampleEntity>();
-//		
-//		Mockito.when(httpGatewayServicePort.findAll().size() > 0)
-//				.thenReturn(null);
-//		
-//		entities = httpGateway.findAll();
-//		// testing
-//		// System.out.println("Auths: "+authorities);
-//		
-//		assertNull(entities);
-//    }
-    
-//    @Test
-//    void findSampleEntityByIdTest() {
-//    	Mockito.when(httpGatewayPersistencePort
-//    			.findById(sampleEntityDto.getId())
-//    			.isPresent())
-//    			.thenReturn(null);    	
-//    	Optional<SampleEntity> fetchedSampleEntity = httpGateway.findById(sampleEntity.getId());
-//    	
-//    	assertNull(fetchedSampleEntity);
-//    }
  
 }

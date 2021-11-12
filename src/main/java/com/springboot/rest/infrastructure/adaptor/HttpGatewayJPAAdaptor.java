@@ -15,29 +15,20 @@ import java.util.Map;
 public class HttpGatewayJPAAdaptor implements HttpGatewayPersistencePort {
 
     private final HttpGateway httpGateway;
-    
     public HttpGatewayJPAAdaptor(HttpGateway httpGateway) {
         this.httpGateway = httpGateway;
     }
 
-
     // Implementations
-    
 	@Override
-	public String performGHR(Map<String, String> httpHeader) throws IOException {
-		
-		return httpGateway.performGETHttpReq(httpHeader.get("Accept")
-										, httpHeader.get("Auth")
-										, httpHeader.get("ExternalURL"));
-	}
-	
-	@Override
-	public String performPHR(Map<String, String> httpHeader) throws IOException {
-		
-		return httpGateway.performPOSTHttpReq(httpHeader.get("Accept")
-										, httpHeader.get("Auth")
-										, httpHeader.get("ExternalURL"));
+	public String makeGetRequest(Map<String, String> httpHeader) throws IOException {
+		return httpGateway.performGETRequest(httpHeader);
 	}
 
+
+	@Override
+	public String makePostRequest(Map<String, String> httpHeader) throws IOException {
+		return httpGateway.performPOSTRequest(httpHeader);
+	}
 
 }

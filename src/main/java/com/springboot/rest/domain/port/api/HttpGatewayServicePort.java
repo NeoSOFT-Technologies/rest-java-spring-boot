@@ -7,9 +7,9 @@ import java.util.Map;
 
 public interface HttpGatewayServicePort {
 	
-	String performGHR(Map<String, String> httpHeader) throws IOException;
+	String makeGetRequest(Map<String, String> httpHeader) throws IOException;
 	
-	String performPHR(Map<String, String> httpHeader) throws IOException;
+	String makePostRequest(Map<String, String> httpHeader) throws IOException;
 
 
 }
