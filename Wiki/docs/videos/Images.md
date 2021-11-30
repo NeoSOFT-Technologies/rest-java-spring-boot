@@ -26,3 +26,5 @@
 <img width="619" alt="GetCall" src="https://user-images.githubusercontent.com/65208936/143993923-fe6b999f-d55e-426e-b10f-8f9826344255.png">
 
 <img width="590" alt="PostCall" src="https://user-images.githubusercontent.com/65208936/143993987-7edf8945-013b-42c2-9a00-b6b3cfb1741e.png">
+
+![HttpGateway](https://user-images.githubusercontent.com/65208936/144047921-abac1282-e611-48c7-8550-d17c5ffd6d26.png)
