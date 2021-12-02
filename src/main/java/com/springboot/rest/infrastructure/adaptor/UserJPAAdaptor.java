@@ -54,7 +54,7 @@ public class UserJPAAdaptor implements UserPersistencPort {
     }
 
     public Optional<User> findOneByActivationKey(String key) {
-        log.debug("Activating user for activation key {}", key);
+        //log.debug("Activating user for activation key {}", key);
         return userRepository.findOneByActivationKey(key).map(user -> {
             // activate given user for the registration key.
             user.setActivated(true);

@@ -59,7 +59,7 @@ public class UserService implements UserServicePort {
 
     @Override
     public Optional<User> activateRegistration(String key) {
-        log.debug("Activating user for activation key {}", key);
+        //log.debug("Activating user for activation key {}", key);
         return userPersistencePort.findOneByActivationKey(key).map(user -> {
             // activate given user for the registration key.
             user.setActivated(true);
