@@ -72,7 +72,7 @@ public class UserService implements UserServicePort {
 
     @Override
     public Optional<User> completePasswordReset(String newPassword, String key) {
-        log.debug("Reset user password for reset key {}", key);
+        //log.debug("Reset user password for reset key {}", key);
         return userPersistencePort.findOneByResetKey(key).filter(user -> user.getResetDate().isAfter(Instant.now().minusSeconds(86400))).map(user -> {
             user.setPassword(passwordEncoder.encode(newPassword));
             user.setResetKey(null);
