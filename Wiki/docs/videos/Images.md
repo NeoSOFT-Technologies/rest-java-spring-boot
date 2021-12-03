@@ -28,3 +28,8 @@
 <img width="590" alt="PostCall" src="https://user-images.githubusercontent.com/65208936/143993987-7edf8945-013b-42c2-9a00-b6b3cfb1741e.png">
 
 ![HttpGateway](https://user-images.githubusercontent.com/65208936/144047921-abac1282-e611-48c7-8550-d17c5ffd6d26.png)
+
+
+![write-through](https://user-images.githubusercontent.com/65208936/144550797-438dd528-1b78-4fcc-a478-44b166ddc56a.png)
+
+![read-through](https://user-images.githubusercontent.com/65208936/144550809-6c6ce8dc-841f-41d7-9d4d-77ddfb7dd2a8.png)
